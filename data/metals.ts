@@ -1,0 +1,193 @@
+import type { Metal } from "./types";
+
+/**
+ * The six Platinum Group Metals that BH Overseas identifies as its principal
+ * focus.
+ *
+ * `description`, `forms` and `applications` are taken from the company's own
+ * product document without embellishment. `tagline` uses three descriptors
+ * lifted from that same description — it is not added marketing language.
+ * `number` and `mass` are standard chemical reference values.
+ *
+ * Order matches the order the company lists them in its own material, which is
+ * also the order the explorer presents.
+ */
+export const METALS: Metal[] = [
+  {
+    id: "platinum",
+    symbol: "Pt",
+    name: "Platinum",
+    number: 78,
+    mass: "195.08",
+    tagline: ["Rare", "Stable", "Catalytic"],
+    description:
+      "Platinum is a rare precious metal known for its excellent corrosion resistance, catalytic properties and high-temperature stability.",
+    forms: ["Sponge", "Powder", "Wire", "Sheet", "Plate", "Scrap"],
+    formsNote: "and other forms as required",
+    applications: [
+      "Thermocouples",
+      "Laboratory equipment",
+      "Chemical processing",
+      "Catalysts",
+      "Glass manufacturing",
+      "Electronics",
+      "Electroplating",
+      "Other specialized applications",
+    ],
+    palette: {
+      base: "#17191B",
+      mid: "#7F868A",
+      high: "#EDF0F1",
+      cast: "rgba(186,198,208,0.10)",
+      texture: "granule",
+      density: 1.12,
+      grain: 9.5,
+      specular: 0.92,
+    },
+  },
+  {
+    id: "palladium",
+    symbol: "Pd",
+    name: "Palladium",
+    number: 46,
+    mass: "106.42",
+    tagline: ["Catalytic", "Chemical", "Conductive"],
+    description:
+      "Palladium is an important Platinum Group Metal valued for its catalytic, chemical and electrical properties.",
+    forms: ["Sponge", "Powder", "Wire", "Scrap"],
+    formsNote: "and other forms as required",
+    applications: [
+      "Catalysts",
+      "Electronics",
+      "Chemical processing",
+      "Electroplating",
+      "Specialized industrial applications",
+    ],
+    palette: {
+      base: "#141618",
+      mid: "#6D7376",
+      high: "#CFD4D6",
+      cast: "rgba(176,182,186,0.08)",
+      texture: "powder",
+      density: 1.3,
+      grain: 6.2,
+      specular: 0.62,
+    },
+  },
+  {
+    id: "iridium",
+    symbol: "Ir",
+    name: "Iridium",
+    number: 77,
+    mass: "192.22",
+    tagline: ["Rarest", "Corrosion-resistant", "High-temperature"],
+    description:
+      "Iridium is one of the rarest naturally occurring metals and is distinguished by its exceptional corrosion resistance and high-temperature properties.",
+    forms: ["Metal", "Sponge", "Powder", "Scrap"],
+    formsNote: "and other forms as required",
+    applications: [
+      "High-temperature equipment",
+      "Electrochemical applications",
+      "Electronics",
+      "Laboratory equipment",
+      "Specialized industrial uses",
+    ],
+    palette: {
+      base: "#0F1113",
+      mid: "#4F565A",
+      high: "#AAB3B8",
+      cast: "rgba(128,146,160,0.09)",
+      texture: "sponge",
+      density: 1.0,
+      grain: 11,
+      specular: 0.5,
+    },
+  },
+  {
+    id: "ruthenium",
+    symbol: "Ru",
+    name: "Ruthenium",
+    number: 44,
+    mass: "101.07",
+    tagline: ["Hard", "Corrosion-resistant", "Electronic"],
+    description:
+      "Ruthenium is a hard and corrosion-resistant Platinum Group Metal with applications in electronics, catalysts and specialized industrial processes.",
+    forms: ["Metal", "Powder", "Scrap"],
+    formsNote: "and other forms as required",
+    applications: [
+      "Electronics",
+      "Electrical contacts",
+      "Catalysts",
+      "Electroplating",
+      "Specialized alloys",
+    ],
+    palette: {
+      base: "#101113",
+      mid: "#4A4E51",
+      high: "#9AA0A3",
+      cast: "rgba(140,146,150,0.06)",
+      texture: "powder",
+      density: 1.42,
+      grain: 4.6,
+      specular: 0.38,
+    },
+  },
+  {
+    id: "rhodium",
+    symbol: "Rh",
+    name: "Rhodium",
+    number: 45,
+    mass: "102.91",
+    tagline: ["Catalytic", "Reflective", "Corrosion-resistant"],
+    description:
+      "Rhodium is a rare Platinum Group Metal known for its catalytic properties, corrosion resistance and reflective characteristics.",
+    forms: ["Metal", "Powder", "Sponge", "Scrap"],
+    formsNote: "and other forms as required",
+    applications: [
+      "Catalysts",
+      "Chemical processing",
+      "Electroplating",
+      "Glass manufacturing",
+      "Jewellery",
+      "Other specialized applications",
+    ],
+    palette: {
+      base: "#191B1D",
+      mid: "#8C9296",
+      high: "#F5F7F8",
+      cast: "rgba(198,210,218,0.12)",
+      texture: "granule",
+      density: 1.05,
+      grain: 10.5,
+      specular: 1,
+    },
+  },
+  {
+    id: "osmium",
+    symbol: "Os",
+    name: "Osmium",
+    number: 76,
+    mass: "190.23",
+    tagline: ["Dense", "Hard", "Wear-resistant"],
+    description:
+      "Osmium is an exceptionally rare and dense Platinum Group Metal, known for its high hardness and resistance to wear and corrosion.",
+    forms: ["Metal", "Powder", "Compounds"],
+    formsNote: "and other forms subject to specific requirements and availability",
+    applications: [
+      "Specialized alloys",
+      "Scientific and laboratory applications",
+      "Electrical contacts",
+      "Other highly specialized uses",
+    ],
+    palette: {
+      base: "#0A0B0D",
+      mid: "#3E464C",
+      high: "#8794A0",
+      cast: "rgba(96,124,150,0.11)",
+      texture: "chunk",
+      density: 0.86,
+      grain: 14,
+      specular: 0.44,
+    },
+  },
+];
