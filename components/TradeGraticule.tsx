@@ -17,9 +17,9 @@ export default function TradeGraticule() {
       >
         <defs>
           <linearGradient id="arcFade" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#A99567" stopOpacity="0" />
-            <stop offset="50%" stopColor="#A99567" stopOpacity=".85" />
-            <stop offset="100%" stopColor="#A99567" stopOpacity="0" />
+            <stop offset="0%" stopColor="#079FC0" stopOpacity="0" />
+            <stop offset="50%" stopColor="#079FC0" stopOpacity=".85" />
+            <stop offset="100%" stopColor="#079FC0" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -47,7 +47,7 @@ export default function TradeGraticule() {
           <path d="M118 196 Q200 92 286 132" />
           <path d="M142 108 Q210 210 300 186" />
         </g>
-        <g fill="#A99567">
+        <g fill="#079FC0">
           <circle cx="118" cy="196" r="2.6" />
           <circle cx="286" cy="132" r="2.6" />
           <circle cx="142" cy="108" r="2.2" />

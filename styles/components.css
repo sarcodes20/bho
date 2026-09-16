@@ -152,16 +152,25 @@ body.is-locked { overflow: hidden; }
   --hero-scale: 1.55;
   --hero-shift: 0px;
   transform: scale(var(--hero-scale)) translate3d(0, var(--hero-shift), 0);
-  filter: grayscale(1) contrast(1.32) brightness(0.52);
+  /* Lifted and hardened now the scrim is local: the granules need to read as
+     faceted metal across the whole frame, not as a dark wash. */
+  filter: grayscale(1) contrast(1.46) brightness(0.68);
   will-change: transform;
 }
 
-/* Darkens and shapes the plate. Cool, never blue — the blue arrives above. */
+/* Darkens and shapes the plate. Cool, never blue — the blue arrives above.
+
+   Previously a hard left-to-right wall of obsidian blacked out the first
+   quarter of the frame, so the picture read as "dark panel, photo on the
+   right". The scrim is now local to the type block: the material carries
+   across the full width, and only the area actually under the headline is
+   weighted enough to hold white text. */
 .hero__grade {
   position: absolute; inset: 0; z-index: -3;
   background:
-    linear-gradient(180deg, rgba(11,12,13,0.62) 0%, rgba(11,12,13,0.08) 34%, rgba(11,12,13,0.90) 100%),
-    linear-gradient(90deg, var(--obsidian) 0%, rgba(11,12,13,0.94) 24%, rgba(11,12,13,0.30) 64%, rgba(11,12,13,0.72) 100%);
+    radial-gradient(72% 60% at 20% 60%, rgba(11,12,13,0.94) 0%, rgba(11,12,13,0.74) 40%, transparent 78%),
+    linear-gradient(180deg, rgba(11,12,13,0.74) 0%, rgba(11,12,13,0.10) 26%, rgba(11,12,13,0.08) 58%, rgba(11,12,13,0.88) 100%),
+    linear-gradient(90deg, rgba(11,12,13,0.50) 0%, rgba(11,12,13,0.14) 48%, rgba(11,12,13,0.40) 100%);
 }
 
 /* ---- the signature: platinum under cool light -------------------------
@@ -453,11 +462,19 @@ body.is-locked { overflow: hidden; }
 
 /* Same principle as the hero: cool light caught on the specular faces of the
    material, so the accent appears to belong to the metal rather than being
-   painted over it. Sits under the vignette so edges stay dark. */
+   painted over it. Sits under the vignette so edges stay dark.
+
+   --metal-glow is set per metal from its specular value, so selecting Rhodium
+   genuinely lights the environment differently from Osmium. The hue stays
+   constant: the blue is the brand, only its intensity is the material. */
 .metal-panel__light {
   position: absolute; inset: 0; z-index: 1;
   mix-blend-mode: color-dodge;
-  background: radial-gradient(60% 50% at 30% 22%, rgba(33,182,211,0.18) 0%, rgba(7,159,192,0.05) 48%, transparent 76%);
+  background: radial-gradient(60% 50% at 30% 22%,
+    rgba(33,182,211, calc(0.06 + var(--metal-glow, 0.6) * 0.16)) 0%,
+    rgba(7,159,192, calc(0.02 + var(--metal-glow, 0.6) * 0.05)) 48%,
+    transparent 76%);
+  transition: background var(--dur-4) var(--ease);
   pointer-events: none;
 }
 
@@ -467,33 +484,48 @@ body.is-locked { overflow: hidden; }
   background: radial-gradient(110% 85% at 50% 45%, transparent 32%, rgba(11,12,13,0.74) 100%);
   pointer-events: none;
 }
+/* The atomic number is the identity of the metal, so it is set at the top of
+   the scale and the symbol sits into it. The number was previously a six-pixel
+   caption doing none of that work. */
 .metal-panel__glyph {
   position: absolute; inset: 0; z-index: 2;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 0.35rem;
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: flex-end;
+  padding: clamp(1.5rem, 1rem + 2vw, 2.75rem);
   pointer-events: none;
+}
+.metal-panel__z {
+  font-family: var(--font-display);
+  font-size: clamp(5.5rem, 2.6rem + 12vw, 13rem);
+  line-height: 0.74;
+  letter-spacing: -0.04em;
+  font-variant-numeric: lining-nums;
+  /* Engraved rather than filled. A solid tint light enough to see would
+     flatten the material behind it; an outline reads at any size and keeps
+     the texture visible through the numeral. */
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(228, 229, 227, 0.62);
+  text-stroke: 1px rgba(228, 229, 227, 0.62);
+  /* keeps the huge numeral from pushing the symbol down the frame */
+  margin-bottom: -0.04em;
 }
 .metal-panel__glyph-sym {
   font-family: var(--font-display);
-  font-size: clamp(5rem, 2.5rem + 12vw, 11rem);
-  line-height: 0.8;
+  font-size: clamp(3rem, 1.6rem + 7vw, 6.5rem);
+  line-height: 0.85;
   color: var(--white);
-  text-shadow: 0 4px 60px rgba(11,12,13,0.8);
+  text-shadow: 0 4px 60px rgba(11,12,13,0.85);
   letter-spacing: -0.03em;
+  margin-left: 0.06em;
 }
-.metal-panel__glyph-num {
-  font-size: var(--step--2); font-weight: 500;
-  letter-spacing: 0.32em; text-transform: uppercase;
-  color: var(--accent); text-indent: 0.32em;
-  text-shadow: 0 1px 14px rgba(11, 12, 13, 0.95);
-}
+
 
 /* ---- technical readout ------------------------------------------------
    Objective physical constants, not company claims. They do the work of
    making the section read as a materials database rather than a catalogue. */
 .metal-data {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border-top: 1px solid var(--rule);
 }
 .metal-data__cell {
@@ -501,8 +533,8 @@ body.is-locked { overflow: hidden; }
   border-bottom: 1px solid var(--rule);
   display: flex; flex-direction: column; gap: 0.4rem;
 }
-.metal-data__cell:nth-child(odd) { border-right: 1px solid var(--rule); padding-right: 1.25rem; }
-.metal-data__cell:nth-child(even) { padding-left: 1.25rem; }
+.metal-data__cell + .metal-data__cell { padding-left: 1.1rem; }
+.metal-data__cell:not(:last-child) { border-right: 1px solid var(--rule); padding-right: 1.1rem; }
 .metal-data__k {
   font-size: 0.5625rem; font-weight: 500;
   letter-spacing: 0.18em; text-transform: uppercase;
@@ -564,6 +596,95 @@ body.is-locked { overflow: hidden; }
 @keyframes swapIn {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: none; }
+}
+
+/* ================================================== MATERIAL BAND ======== */
+/* Replaces a row of image-plus-caption plates. Three equal cards captioned
+   "Granules / Powder / Powder" was the most template-shaped moment on the
+   page and made the material look like catalogue stock. Here the macro runs
+   full-bleed and the information is reduced to technical annotation. */
+.materialband {
+  position: relative;
+  min-height: clamp(34rem, 26rem + 26vw, 52rem);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding-block: clamp(3.5rem, 2rem + 6vw, 7rem);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--obsidian);
+}
+.materialband__media { position: absolute; inset: 0; z-index: -3; overflow: hidden; }
+.materialband__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  /* Extreme crop — at this scale a granule is a boulder and the pile reads
+     as terrain rather than as a product shot. */
+  object-position: 42% 46%;
+  transform: scale(1.9);
+  filter: grayscale(1) contrast(1.5) brightness(0.62);
+}
+.materialband__grade {
+  position: absolute; inset: 0; z-index: -2;
+  background:
+    linear-gradient(180deg, rgba(11,12,13,0.88) 0%, rgba(11,12,13,0.22) 34%, rgba(11,12,13,0.86) 100%),
+    linear-gradient(90deg, rgba(11,12,13,0.80) 0%, rgba(11,12,13,0.12) 58%, rgba(11,12,13,0.46) 100%);
+}
+.materialband__light {
+  position: absolute; inset: 0; z-index: -1;
+  mix-blend-mode: color-dodge;
+  background: radial-gradient(40% 34% at 68% 30%, rgba(33,182,211,0.15) 0%, rgba(33,182,211,0.04) 44%, transparent 70%);
+  pointer-events: none;
+}
+
+.materialband__head { margin-bottom: auto; }
+.materialband__title { max-width: 16ch; }
+
+/* The forms, set as a technical index rather than as cards. */
+.materialband__forms {
+  display: flex; flex-wrap: wrap;
+  gap: 0.5rem clamp(1.25rem, 0.5rem + 2vw, 2.5rem);
+  margin-top: clamp(2rem, 1.2rem + 3vw, 3.5rem);
+}
+.materialband__forms li {
+  display: inline-flex; align-items: baseline; gap: 0.5rem;
+  font-size: var(--step--1);
+  color: var(--soft-silver);
+  letter-spacing: 0.02em;
+}
+.materialband__forms .idx {
+  font-size: 0.5625rem; letter-spacing: 0.14em;
+  color: var(--accent); font-variant-numeric: tabular-nums;
+}
+
+.materialband__foot {
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+  gap: 1.5rem 2rem;
+  margin-top: clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+}
+.materialband__note { font-size: var(--step--1); color: var(--fg-muted); max-width: 40ch; line-height: 1.6; }
+
+/* Reference specimens, kept small on purpose: at 447-500px these sources are
+   convincing as datasheet swatches and unconvincing at any larger size. */
+.materialband__refs { display: flex; gap: 0.9rem; }
+.materialband__ref { width: clamp(4rem, 2.6rem + 4.4vw, 6rem); }
+.materialband__ref-frame {
+  display: block;
+  aspect-ratio: 1; overflow: hidden;
+  border: 1px solid var(--accent-line);
+  background: var(--carbon);
+}
+.materialband__ref img {
+  width: 100%; height: 100%; object-fit: cover;
+  /* These sources are shot on white. Left untouched they read as bright
+     stickers stuck on the band, so they are pulled down into its value range
+     and sit as inset references rather than as separate pictures. */
+  filter: grayscale(1) contrast(1.2) brightness(0.55);
+}
+.materialband__ref figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.5rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--fg-faint);
 }
 
 /* ===================================================== SPECIMEN (light) == */
@@ -885,6 +1006,19 @@ select.field__control option { background: var(--graphite); color: var(--white);
 /* ============================================================== CONTACT == */
 .contact__grid { display: grid; grid-template-columns: 1fr; gap: clamp(2.5rem, 1.5rem + 4vw, 4.5rem); }
 .contact__title { max-width: 14ch; }
+/* The single address, set at display size — it is the action for this
+   section now that the enquiry form sits directly above it. */
+.contact__email {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--fg-strong);
+  word-break: break-word;
+}
+.contact__email::after { background: var(--accent); }
+
 .contact__channels { display: flex; flex-direction: column; }
 .channel {
   display: flex; flex-direction: column; gap: 0.4rem;

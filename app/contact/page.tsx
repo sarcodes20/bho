@@ -6,7 +6,7 @@ import { Section } from "@/components/ui";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Tell us the metal, purity, form and quantity you require. BH Overseas responds to specification enquiries by email.",
+    "Tell us your requirements. BH Overseas responds to enquiries by email.",
   alternates: { canonical: "/contact" },
 };
 

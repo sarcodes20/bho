@@ -9,7 +9,7 @@ import {
   Contact,
   Metals,
   SecondaryMaterials,
-  Specimens,
+  MaterialBand,
   Statement,
 } from "@/components/Sections";
 
@@ -25,7 +25,7 @@ export default function HomePage() {
 
       {/* The products. */}
       <Metals />
-      <Specimens />
+      <MaterialBand />
 
       {/* What we do with them. */}
       <Capabilities />

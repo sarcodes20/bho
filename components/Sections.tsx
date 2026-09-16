@@ -105,46 +105,69 @@ export function Metals() {
   );
 }
 
-/* ======================================================== SPECIMENS ===== */
-export function Specimens() {
+/* =================================================== MATERIAL BAND ====== */
+/**
+ * Replaces a row of image-plus-caption plates. Three equal cards captioned
+ * "Granules / Powder / Powder" was the most template-shaped moment on the page
+ * and made the material read as catalogue stock. Here the macro runs full-bleed
+ * and the information is reduced to technical annotation.
+ */
+export function MaterialBand() {
+  const hero = COMPANY.specimens[0];
+  const refs = COMPANY.specimens.filter((s) => s.ref);
+
   return (
-    <Section light labelledBy="formsTitle">
-      <div className="explorer__head">
-        <div>
-          <Eyebrow style={{ marginBottom: "1.75rem" }}>Forms</Eyebrow>
-          <DisplayLines
-            id="formsTitle"
-            size="md"
-            lines={["Supplied to the form", "the process requires."]}
-          />
-        </div>
-        <p className="body-copy" data-reveal style={{ ...delay(160), maxWidth: "32ch" }}>
-          Sponge, powder, wire, sheet, plate, metal and scrap — availability
-          varies by metal, specification and market conditions.
-        </p>
+    <section className="materialband" aria-labelledby="formsTitle">
+      <div className="materialband__media" aria-hidden="true">
+        <Image
+          src={hero.src}
+          alt=""
+          width={1000}
+          height={552}
+          sizes="100vw"
+        />
+      </div>
+      <div className="materialband__grade" aria-hidden="true" />
+      <div className="materialband__light" aria-hidden="true" />
+
+      <div className="shell materialband__head">
+        <Eyebrow style={{ marginBottom: "1.75rem" }}>Forms</Eyebrow>
+        <DisplayLines
+          id="formsTitle"
+          className="materialband__title"
+          lines={["Supplied to the form", "the process requires."]}
+        />
+
+        <ul className="materialband__forms" data-reveal style={delay(160)}>
+          {COMPANY.forms.map((form, i) => (
+            <li key={form}>
+              <span className="idx">{String(i + 1).padStart(2, "0")}</span>
+              {form}
+            </li>
+          ))}
+        </ul>
       </div>
 
-      <div className="specimens">
-        {COMPANY.specimens.map((s, i) => (
-          <figure className="specimen" key={s.src} data-reveal style={delay(i * 110)}>
-            <div className="specimen__frame mask-reveal">
-              <span className="specimen__tag">{s.tag}</span>
-              <Image
-                src={s.src}
-                alt={s.alt}
-                width={900}
-                height={675}
-                sizes="(min-width: 48em) 33vw, 100vw"
-              />
-            </div>
-            <figcaption className="specimen__caption">
-              <span className="specimen__title">{s.title}</span>
-              <span className="specimen__note">{s.note}</span>
-            </figcaption>
-          </figure>
-        ))}
+      <div className="shell">
+        <div className="materialband__foot" data-reveal style={delay(240)}>
+          <p className="materialband__note">
+            Availability varies by metal and specification.
+          </p>
+
+          {/* Small-format sources, kept small on purpose. */}
+          <div className="materialband__refs">
+            {refs.map((s) => (
+              <figure className="materialband__ref" key={s.src}>
+                <span className="materialband__ref-frame">
+                  <Image src={s.src} alt={s.alt} width={500} height={500} sizes="10vw" />
+                </span>
+                <figcaption>{s.tag}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }
 
@@ -257,7 +280,7 @@ export function Approach() {
  * @param enquiryHref where the CTA points. Defaults to the in-page form; pages
  * that do not carry the form pass the dedicated /contact route instead.
  */
-export function Contact({ enquiryHref = "#enquiry" }: { enquiryHref?: string }) {
+export function Contact() {
   return (
     <Section id="contact" className="hairline-top" labelledBy="contactTitle">
       <div className="contact__grid">
@@ -268,31 +291,14 @@ export function Contact({ enquiryHref = "#enquiry" }: { enquiryHref?: string }) 
             className="contact__title"
             lines={COMPANY.contact.title}
           />
-          <p
-            className="lede"
-            data-reveal
-            style={{ ...delay(200), marginTop: "2rem" }}
-          >
-            {COMPANY.contact.copy}
-          </p>
-          <div data-reveal style={{ ...delay(300), marginTop: "2.5rem" }}>
-            <a className="btn" href={enquiryHref}>
-              Tell us your requirements
-              <Arrow />
-            </a>
-          </div>
         </div>
 
-        {/* One published address, so one channel. The three-way split
-            (Enquiries / General / Direct) existed only to distinguish three
-            different addresses. */}
+        {/* The address is the action — set at display size rather than buried
+            in a row of channels, since it is the only one. */}
         <div className="contact__channels" data-reveal style={delay(160)}>
-          <div className="channel">
-            <span className="channel__k">Email</span>
-            <a className="channel__v link" href={`mailto:${COMPANY.email}`}>
-              {COMPANY.email}
-            </a>
-          </div>
+          <a className="contact__email link" href={`mailto:${COMPANY.email}`}>
+            {COMPANY.email}
+          </a>
         </div>
       </div>
     </Section>

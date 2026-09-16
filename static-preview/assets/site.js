@@ -248,6 +248,9 @@
     wrap.setAttribute("role", "tabpanel");
     wrap.setAttribute("aria-labelledby", "tab-" + m.id);
     wrap.setAttribute("tabindex", "0");
+    // Selecting a brighter metal lights the environment more strongly. The hue
+    // is constant — only the intensity is the material.
+    wrap.style.setProperty("--metal-glow", String(m.palette.specular));
 
     var formsList = m.forms.map(function (f) {
       return '<span class="spec__chip">' + esc(f) + "</span>";
@@ -256,7 +259,6 @@
     // Objective physical constants. They are reference values, not company
     // claims, and they are what make the panel read as a materials database.
     var data = [
-      { k: "Atomic number", v: m.number, u: "" },
       { k: "Atomic mass", v: m.mass, u: "u" },
       { k: "Density", v: m.density, u: "g/cm³" },
       { k: "Melting point", v: m.meltingPoint, u: "°C" }
@@ -273,8 +275,8 @@
         '<canvas class="metal-panel__canvas" aria-hidden="true"></canvas>' +
         '<span class="metal-panel__light" aria-hidden="true"></span>' +
         '<div class="metal-panel__glyph">' +
+          '<span class="metal-panel__z">' + m.number + "</span>" +
           '<span class="metal-panel__glyph-sym">' + esc(m.symbol) + "</span>" +
-          '<span class="metal-panel__glyph-num">' + esc(m.symbol) + " / " + m.number + "</span>" +
         "</div>" +
       "</div>" +
       '<div class="metal-panel__body">' +
@@ -356,26 +358,32 @@
     });
   }
 
-  /* ========================================================= specimens === */
-  function buildSpecimens() {
-    var host = $("#specimens");
-    if (!host || !COMPANY.specimens) return;
-    COMPANY.specimens.forEach(function (s, i) {
-      var fig = el("figure", "specimen");
-      fig.setAttribute("data-reveal", "");
-      fig.style.setProperty("--reveal-delay", (i * 110) + "ms");
-      fig.innerHTML =
-        '<div class="specimen__frame mask-reveal">' +
-          '<span class="specimen__tag">' + esc(s.tag) + "</span>" +
-          '<img src="' + esc(s.src) + '" alt="' + esc(s.alt) + '" loading="lazy" decoding="async">' +
-        "</div>" +
-        '<figcaption class="specimen__caption">' +
-          '<span class="specimen__title">' + esc(s.title) + "</span>" +
-          '<span class="specimen__note">' + esc(s.note) + "</span>" +
-        "</figcaption>";
-      host.appendChild(fig);
-    });
-    observeNew(host);
+  /* ==================================================== material band === */
+  function buildMaterialBand() {
+    var forms = $("#bandForms");
+    if (forms && COMPANY.forms) {
+      COMPANY.forms.forEach(function (f, i) {
+        var li = el("li");
+        li.innerHTML =
+          '<span class="idx">' + ("0" + (i + 1)) + "</span>" + esc(f);
+        forms.appendChild(li);
+      });
+    }
+
+    var refs = $("#bandRefs");
+    if (refs && COMPANY.specimens) {
+      // Only the small-format sources: the large granule macro is already
+      // carrying the band behind them.
+      COMPANY.specimens.filter(function (s) { return s.ref; }).forEach(function (s) {
+        var f = el("figure", "materialband__ref");
+        f.innerHTML =
+          '<span class="materialband__ref-frame">' +
+            '<img src="' + esc(s.src) + '" alt="' + esc(s.alt) + '" loading="lazy" decoding="async">' +
+          "</span>" +
+          "<figcaption>" + esc(s.tag) + "</figcaption>";
+        refs.appendChild(f);
+      });
+    }
   }
 
   /* ====================================================== capabilities === */
@@ -542,7 +550,7 @@
   function init() {
     buildHeroIndex();
     buildIndexBar();
-    buildSpecimens();
+    buildMaterialBand();
     buildCaps();
     buildSecondary();
     buildPrinciples();

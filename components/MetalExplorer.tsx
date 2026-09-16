@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { KeyboardEvent } from "react";
+import type { CSSProperties, KeyboardEvent } from "react";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { METALS } from "@/data/metals";
 import MaterialCanvas from "@/components/MaterialCanvas";
@@ -92,11 +92,15 @@ export default function MetalExplorer() {
         })}
       </div>
 
+      {/* --metal-glow drives the panel light: brighter metals light the
+          environment more strongly. The hue is constant — only the intensity
+          is the material. */}
       <AnimatePresence mode="wait">
         <motion.div
           key={active.id}
           id="metal-panel"
           className="metal-panel"
+          style={{ "--metal-glow": active.palette.specular } as CSSProperties}
           role="tabpanel"
           aria-labelledby={`tab-${active.id}`}
           tabIndex={0}
@@ -113,10 +117,8 @@ export default function MetalExplorer() {
             />
             <span className="metal-panel__light" aria-hidden="true" />
             <div className="metal-panel__glyph">
+              <span className="metal-panel__z">{active.number}</span>
               <span className="metal-panel__glyph-sym">{active.symbol}</span>
-              <span className="metal-panel__glyph-num">
-                {active.symbol} / {active.number}
-              </span>
             </div>
           </div>
 
@@ -136,7 +138,6 @@ export default function MetalExplorer() {
                 panel read as a materials database rather than a catalogue. */}
             <dl className="metal-data">
               {[
-                { k: "Atomic number", v: String(active.number), u: "" },
                 { k: "Atomic mass", v: active.mass, u: "u" },
                 { k: "Density", v: active.density, u: "g/cm³" },
                 { k: "Melting point", v: active.meltingPoint, u: "°C" },

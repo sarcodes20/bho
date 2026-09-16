@@ -81,6 +81,8 @@ export interface Specimen {
   tag: string;
   title: string;
   note: string;
+  /** Small-format source: shown only as a datasheet swatch, never enlarged. */
+  ref?: boolean;
 }
 
 export interface NavItem {

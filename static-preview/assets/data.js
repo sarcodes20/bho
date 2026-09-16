@@ -345,9 +345,17 @@ window.COMPANY = {
   ],
 
   /**
-   * Supplied photography, art-directed as specimen plates. Captions describe
-   * the form shown — they do not claim the images depict a specific metal the
-   * company has not identified.
+   * The forms the company supplies, drawn from the per-metal form lists in the
+   * product document. Shown as a technical index over the material band.
+   */
+  forms: ["Sponge", "Powder", "Wire", "Sheet", "Plate", "Metal", "Scrap"],
+
+  /**
+   * Supplied photography. The large granule macro carries the material band
+   * full-bleed; the two small-format sources are marked `ref` and appear only
+   * as datasheet swatches, which is the one size they are convincing at.
+   * Captions describe the form shown — they do not claim the images depict a
+   * specific metal the company has not identified.
    */
   specimens: [
     {
@@ -363,13 +371,15 @@ window.COMPANY = {
       tag: "Powder",
       title: "Powder",
       note: "Fine powder, used where surface area and dispersion matter.",
+      ref: true,
     },
     {
       src: "../public/images/source/powder-dark.jpg",
       alt: "Studio photograph of dark precious-metal powder",
-      tag: "Powder",
+      tag: "Fine powder",
       title: "Fine dark powder",
       note: "A finer, darker grade — supplied to the assay and purity specified.",
+      ref: true,
     },
   ],
 
@@ -383,8 +393,13 @@ window.COMPANY = {
 
   contact: {
     eyebrow: "Contact",
-    title: ["Let's discuss", "your specification."],
-    copy: "Tell us the metal, purity, form and quantity you require.",
+    /**
+     * Client-specified wording. The previous headline and its supporting line
+     * were withdrawn by the client and must not return. The email is the
+     * action here — the enquiry form sits directly above it, so a button
+     * would only duplicate that.
+     */
+    title: ["Tell us your", "requirements."],
   },
 
   nav: [

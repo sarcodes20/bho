@@ -36,7 +36,7 @@ export default function Hero() {
             style={{ "--reveal-delay": "520ms" } as CSSProperties}
           >
             <a className="btn" href="#metals">
-              Explore the metals
+              Explore our products
               <Arrow />
             </a>
             <a className="btn btn--ghost" href="#enquiry">

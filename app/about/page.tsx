@@ -14,7 +14,7 @@ export default function AboutPage() {
       <Statement />
       <About />
       <Approach />
-      <Contact enquiryHref="/contact" />
+      <Contact />
     </main>
   );
 }

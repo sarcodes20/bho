@@ -222,7 +222,7 @@ export default function EnquiryForm() {
               id="f-message"
               name="message"
               rows={5}
-              placeholder="Tell us the metal, purity, form and quantity you require, and anything else relevant."
+              placeholder="Your requirement — including specification, quantity and intended application."
               value={values.message}
               onChange={set("message")}
               aria-invalid={Boolean(errors.message)}

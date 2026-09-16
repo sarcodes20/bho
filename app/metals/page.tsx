@@ -7,7 +7,7 @@ import MetalExplorer from "@/components/MetalExplorer";
 import EnquiryForm from "@/components/EnquiryForm";
 
 export const metadata: Metadata = {
-  title: "Metals",
+  title: "Products",
   description:
     "Platinum, Palladium, Iridium, Ruthenium, Rhodium and Osmium — forms, applications and specifications supplied by BH Overseas.",
   alternates: { canonical: "/metals" },
