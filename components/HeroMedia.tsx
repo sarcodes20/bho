@@ -23,7 +23,7 @@ export default function HeroMedia() {
     const update = () => {
       const y = window.scrollY;
       if (y < window.innerHeight * 1.2) {
-        img.style.transform = `scale(1.08) translate3d(0, ${(y * 0.055).toFixed(2)}px, 0)`;
+        img.style.setProperty("--hero-shift", `${(y * 0.05).toFixed(2)}px`);
       }
       ticking = false;
     };
@@ -52,6 +52,8 @@ export default function HeroMedia() {
         />
       </div>
       <div className="hero__grade" aria-hidden="true" />
+      {/* Cool light caught on the specular faces of the metal — the signature. */}
+      <div className="hero__light" aria-hidden="true" />
       <div className="hero__sweep" aria-hidden="true" />
     </>
   );

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { METALS } from "@/data/metals";
-import { PREFILL_METAL_EVENT } from "@/lib/enquiry";
 import MaterialCanvas from "@/components/MaterialCanvas";
 import { Arrow } from "@/components/ui";
 
@@ -49,18 +48,6 @@ export default function MetalExplorer() {
     []
   );
 
-  /**
-   * Pre-fills the enquiry form with the metal the visitor was reading about.
-   * Announced as an event rather than written onto the select: the form is
-   * controlled, so assigning `.value` directly would be reverted on its next
-   * render and React's change tracking would swallow a synthetic event.
-   */
-  const prefillEnquiry = useCallback((name: string) => {
-    window.dispatchEvent(
-      new CustomEvent(PREFILL_METAL_EVENT, { detail: name })
-    );
-  }, []);
-
   return (
     <MotionConfig reducedMotion="user">
       <div
@@ -92,6 +79,8 @@ export default function MetalExplorer() {
                 seed={metal.id}
                 quality={0.5}
               />
+              {/* Selection frame + register ticks, drawn over the material. */}
+              <span className="metal-tab__frame" aria-hidden="true" />
               <span className="metal-tab__top">
                 <span className="metal-tab__num">{metal.number}</span>
                 <span className="metal-tab__mass">{metal.mass}</span>
@@ -122,10 +111,11 @@ export default function MetalExplorer() {
               palette={active.palette}
               seed={active.id}
             />
+            <span className="metal-panel__light" aria-hidden="true" />
             <div className="metal-panel__glyph">
               <span className="metal-panel__glyph-sym">{active.symbol}</span>
               <span className="metal-panel__glyph-num">
-                {active.number} &middot; {active.mass}
+                {active.symbol} / {active.number}
               </span>
             </div>
           </div>
@@ -141,6 +131,25 @@ export default function MetalExplorer() {
             </div>
 
             <p className="metal-panel__desc">{active.description}</p>
+
+            {/* Reference constants, not company claims. They are what make the
+                panel read as a materials database rather than a catalogue. */}
+            <dl className="metal-data">
+              {[
+                { k: "Atomic number", v: String(active.number), u: "" },
+                { k: "Atomic mass", v: active.mass, u: "u" },
+                { k: "Density", v: active.density, u: "g/cm³" },
+                { k: "Melting point", v: active.meltingPoint, u: "°C" },
+              ].map((d) => (
+                <div className="metal-data__cell" key={d.k}>
+                  <dt className="metal-data__k">{d.k}</dt>
+                  <dd className="metal-data__v">
+                    {d.v}
+                    {d.u && <span className="unit">{d.u}</span>}
+                  </dd>
+                </div>
+              ))}
+            </dl>
 
             <div className="spec">
               <p className="spec__label">Available forms</p>
@@ -176,7 +185,6 @@ export default function MetalExplorer() {
               <a
                 className="btn"
                 href="#enquiry"
-                onClick={() => prefillEnquiry(active.name)}
               >
                 Enquire about {active.name}
                 <Arrow />

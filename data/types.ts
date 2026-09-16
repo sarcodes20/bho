@@ -35,6 +35,10 @@ export interface Metal {
   number: number;
   /** Standard atomic weight. */
   mass: string;
+  /** g/cm³ at room temperature. */
+  density: string;
+  /** °C. */
+  meltingPoint: string;
   /**
    * Three descriptors drawn directly from the company description of the
    * metal. Not marketing copy.

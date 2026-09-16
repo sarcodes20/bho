@@ -35,25 +35,25 @@ export const COMPANY = {
   foundedYear: "2015",
   incorporatedYear: "2026",
 
-  emails: {
-    primary: "pr.singhal@bhoverseas.com",
-    general: "info@bhoverseas.com",
-    sales: "sales@bhoverseas.com",
-  },
+  /**
+   * The single published address. Client instruction: this is the only email
+   * that may appear anywhere on the site, in any mailto, or in metadata.
+   */
+  email: "info@bhoverseas.com",
 
   hero: {
     eyebrow: "Established 2015",
-    title: ["Rare metals.", "Precisely handled."],
-    lede: "BH Overseas sources, refines, trades and supplies Platinum Group Metals and specialty precious metals for industrial and specialized applications.",
-    stamp: "Pt · Pd · Ir · Ru · Rh · Os",
+    /** Two lines, two sizes — the second is set at the top of the scale. */
+    titleLead: "Rare metals.",
+    titleMain: "Precisely handled.",
+    lede: "Sourcing, refining, trading and supply of Platinum Group Metals for industrial and specialized applications.",
   },
 
   statement: {
     eyebrow: "The company",
     title: ["Experience since 2015.", "Precision for", "what comes next."],
     copy: [
-      "BH Overseas has developed experience in the sourcing, refining, trading and supply of Platinum Group Metals and selected specialty precious metals.",
-      "Our products are sourced and supplied according to customers' required specifications, quantities and forms.",
+      "Products are sourced and supplied to the specification, quantity and form each customer requires.",
     ],
   },
 
@@ -61,9 +61,9 @@ export const COMPANY = {
     eyebrow: "About",
     title: ["Built around", "the material."],
     copy: [
-      "BH Overseas has been engaged in the business of Platinum Group Metals and other specialized precious metals since 2015. Over the years we have developed experience in the sourcing, refining, trading and supply of these metals for industrial and specialized applications.",
-      "Our primary focus is on Platinum, Palladium, Iridium, Ruthenium, Rhodium and Osmium. We also evaluate requirements for other precious and specialty metals based on availability, specifications and application.",
-      "The incorporation of BH Overseas as a Private Limited Company in 2026 represents an important milestone in our journey. We intend to build on the experience developed since 2015 and further expand our presence in the global precious-metals industry.",
+      "Engaged in Platinum Group Metals and other specialized precious metals since 2015, with experience in the sourcing, refining, trading and supply of these metals for industrial and specialized applications.",
+      "The primary focus is Platinum, Palladium, Iridium, Ruthenium, Rhodium and Osmium. Requirements for other precious and specialty metals are evaluated on availability, specification and application.",
+      "Incorporated as a Private Limited Company in 2026, building on the experience developed since 2015.",
     ],
     facts: [
       { k: "Focus", v: "Platinum Group Metals" },
@@ -113,7 +113,7 @@ export const COMPANY = {
       "Other secondary PGM materials",
     ],
     caveat:
-      "Each material is evaluated according to its composition, assay and other relevant characteristics. Acceptance, treatment and terms follow that evaluation.",
+      "Each material is evaluated on its composition, assay and other relevant characteristics.",
     flow: [
       { name: "Secondary material", note: "Scrap, residues, spent catalysts and other PGM-bearing material." },
       { name: "Evaluation", note: "Composition, quantity and technical characteristics are reviewed." },
@@ -126,19 +126,19 @@ export const COMPANY = {
   principles: [
     {
       name: "Quality",
-      copy: "We place importance on accurate specifications, purity, assay and appropriate documentation at every stage of our operations.",
+      copy: "Accurate specification, purity, assay and documentation at every stage.",
     },
     {
       name: "Reliability",
-      copy: "We value clear communication and consistent, ethical execution in our dealings with suppliers and customers.",
+      copy: "Clear communication and consistent, ethical execution.",
     },
     {
       name: "Knowledge",
-      copy: "Our focus on Platinum Group Metals enables us to develop specialized knowledge of the metals, their applications and the markets in which we operate.",
+      copy: "Specialized understanding of the metals, their applications and their markets.",
     },
     {
       name: "Integrity",
-      copy: "We believe professional and transparent relationships form the foundation of sustainable business.",
+      copy: "Professional and transparent relationships.",
     },
   ] as Principle[],
 
@@ -174,9 +174,9 @@ export const COMPANY = {
   enquiry: {
     eyebrow: "Specification",
     title: ["Tell us", "what you need."],
-    subtitle: ["Metal", "Purity", "Form", "Quantity"],
-    note: "Availability of individual metals, purities and forms may vary depending on market conditions and sourcing. We will respond to your enquiry by email.",
-    forms: ["Sponge", "Powder", "Wire", "Sheet", "Plate", "Metal", "Scrap", "Other"],
+    note: "Availability varies with market conditions and sourcing. We respond by email.",
+    // `subtitle` (Metal / Purity / Form / Quantity) and `forms` were removed
+    // with the fields they labelled — see lib/enquiry.ts.
   },
 
   contact: {
@@ -187,7 +187,7 @@ export const COMPANY = {
 
   nav: [
     { label: "About", href: "#about" },
-    { label: "Metals", href: "#metals" },
+    { label: "Products", href: "#metals" },
     { label: "Capabilities", href: "#capabilities" },
     { label: "Secondary Materials", href: "#secondary" },
     { label: "Approach", href: "#approach" },

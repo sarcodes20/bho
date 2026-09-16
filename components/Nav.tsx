@@ -8,9 +8,7 @@ import { COMPANY } from "@/data/company";
 
 export default function Nav() {
   const [solid, setSolid] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
-  const lastY = useRef(0);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const [active, setActive] = useState<string>("");
   const pathname = usePathname();
@@ -26,13 +24,10 @@ export default function Nav() {
   useEffect(() => {
     let ticking = false;
 
+    // The navigation is persistent: the only scroll-driven change is the
+    // transition from transparent to the solid, blurred surface.
     const onScroll = () => {
-      const y = window.scrollY;
-      setSolid(y > 24);
-      // Hide on downward scroll once clear of the hero; always show going up.
-      if (y > 560 && y > lastY.current + 4 && !open) setHidden(true);
-      else if (y < lastY.current - 4 || y < 200) setHidden(false);
-      lastY.current = y;
+      setSolid(window.scrollY > 24);
       ticking = false;
     };
 
@@ -45,7 +40,7 @@ export default function Nav() {
     window.addEventListener("scroll", handler, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", handler);
-  }, [open]);
+  }, []);
 
   /* ---- active section ------------------------------------------------- */
   useEffect(() => {
@@ -94,9 +89,7 @@ export default function Nav() {
     };
   }, [open, close]);
 
-  const navClass = ["nav", solid ? "is-solid" : "", hidden ? "is-hidden" : ""]
-    .filter(Boolean)
-    .join(" ");
+  const navClass = ["nav", solid ? "is-solid" : ""].filter(Boolean).join(" ");
 
   return (
     // reducedMotion="user" makes every Motion animation in the tree respect
@@ -197,8 +190,8 @@ export default function Nav() {
                   &#8594;
                 </span>
               </a>
-              <a className="nav__drawer-mail" href={`mailto:${COMPANY.emails.sales}`}>
-                {COMPANY.emails.sales}
+              <a className="nav__drawer-mail" href={`mailto:${COMPANY.email}`}>
+                {COMPANY.email}
               </a>
             </motion.div>
           </motion.div>

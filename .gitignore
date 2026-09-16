@@ -13,3 +13,8 @@ next-env.d.ts
 
 # Presentation captures, not source.
 /.screenshots
+
+# Accidental duplicate of the project created when the editor session moved
+# folders. It shadows the real source at ./ and references data shapes that no
+# longer exist, so it must never be committed or compiled.
+/bh-overseas

@@ -24,7 +24,7 @@
   /* ==================================================== reveal on scroll == */
   var revealObserver = null;
   function initReveal() {
-    var targets = document.querySelectorAll("[data-reveal], .reveal-lines, .mask-reveal, .principle");
+    var targets = document.querySelectorAll("[data-reveal], .reveal-lines, .mask-reveal, .principle, .caps");
     if (!("IntersectionObserver" in window) || reduceMotion) {
       for (var i = 0; i < targets.length; i++) targets[i].classList.add("is-revealed");
       return;
@@ -56,19 +56,12 @@
     var nav = $("#nav");
     var toggle = $("#navToggle");
     var drawer = $("#navDrawer");
-    var lastY = window.pageYOffset;
     var ticking = false;
 
     function onScroll() {
-      var y = window.pageYOffset;
-      nav.classList.toggle("is-solid", y > 24);
-      // Hide on downward scroll once clear of the hero; always show on the way up.
-      if (y > 560 && y > lastY + 4 && !drawer.classList.contains("is-open")) {
-        nav.classList.add("is-hidden");
-      } else if (y < lastY - 4 || y < 200) {
-        nav.classList.remove("is-hidden");
-      }
-      lastY = y;
+      // The navigation is persistent: the only scroll-driven change is the
+      // transition from transparent to the solid, blurred surface.
+      nav.classList.toggle("is-solid", window.pageYOffset > 24);
       ticking = false;
     }
     window.addEventListener("scroll", function () {
@@ -85,7 +78,6 @@
         drawer.hidden = false;
         // next frame so the transition runs
         window.requestAnimationFrame(function () { drawer.classList.add("is-open"); });
-        nav.classList.remove("is-hidden");
       } else {
         drawer.classList.remove("is-open");
         window.setTimeout(function () {
@@ -143,13 +135,26 @@
       var y = window.pageYOffset;
       if (y < window.innerHeight * 1.2) {
         // Small, slow, and always scaled up so no edge is ever exposed.
-        img.style.transform = "scale(1.08) translate3d(0," + (y * 0.055).toFixed(2) + "px,0)";
+        img.style.setProperty("--hero-shift", (y * 0.05).toFixed(2) + "px");
       }
       ticking = false;
     }
     window.addEventListener("scroll", function () {
       if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
     }, { passive: true });
+  }
+
+  /* ===================================================== hero index ====== */
+  function buildHeroIndex() {
+    var host = $("#heroIndex");
+    if (!host) return;
+    METALS.forEach(function (m) {
+      var li = el("li");
+      li.innerHTML =
+        '<span class="sym">' + esc(m.symbol) + "</span>" +
+        '<span class="num">' + m.number + "</span>";
+      host.appendChild(li);
+    });
   }
 
   /* ======================================================== index bar ==== */
@@ -194,6 +199,7 @@
       b.setAttribute("data-metal", m.id);
       b.innerHTML =
         '<canvas class="metal-tab__field" aria-hidden="true"></canvas>' +
+        '<span class="metal-tab__frame" aria-hidden="true"></span>' +
         '<span class="metal-tab__top">' +
           '<span class="metal-tab__num">' + m.number + "</span>" +
           '<span class="metal-tab__mass">' + esc(m.mass) + "</span>" +
@@ -247,12 +253,28 @@
       return '<span class="spec__chip">' + esc(f) + "</span>";
     }).join("");
 
+    // Objective physical constants. They are reference values, not company
+    // claims, and they are what make the panel read as a materials database.
+    var data = [
+      { k: "Atomic number", v: m.number, u: "" },
+      { k: "Atomic mass", v: m.mass, u: "u" },
+      { k: "Density", v: m.density, u: "g/cm³" },
+      { k: "Melting point", v: m.meltingPoint, u: "°C" }
+    ].map(function (d) {
+      return '<div class="metal-data__cell">' +
+        '<span class="metal-data__k">' + esc(d.k) + "</span>" +
+        '<span class="metal-data__v">' + esc(d.v) +
+          (d.u ? '<span class="unit">' + esc(d.u) + "</span>" : "") +
+        "</span></div>";
+    }).join("");
+
     wrap.innerHTML =
       '<div class="metal-panel__visual">' +
         '<canvas class="metal-panel__canvas" aria-hidden="true"></canvas>' +
+        '<span class="metal-panel__light" aria-hidden="true"></span>' +
         '<div class="metal-panel__glyph">' +
           '<span class="metal-panel__glyph-sym">' + esc(m.symbol) + "</span>" +
-          '<span class="metal-panel__glyph-num">' + m.number + " &middot; " + esc(m.mass) + "</span>" +
+          '<span class="metal-panel__glyph-num">' + esc(m.symbol) + " / " + m.number + "</span>" +
         "</div>" +
       "</div>" +
       '<div class="metal-panel__body">' +
@@ -263,6 +285,7 @@
           "</p>" +
         "</div>" +
         '<p class="metal-panel__desc">' + esc(m.description) + "</p>" +
+        '<div class="metal-data">' + data + "</div>" +
         '<div class="spec">' +
           '<p class="spec__label">Available forms</p>' +
           '<div class="spec__list">' + formsList + "</div>" +
@@ -275,7 +298,7 @@
           "</p>" +
         "</div>" +
         '<div class="metal-panel__foot">' +
-          '<a class="btn" href="#enquiry" data-enquire="' + esc(m.name) + '">' +
+          '<a class="btn" href="#enquiry">' +
             "Enquire about " + esc(m.name) +
             '<span class="btn__arrow" aria-hidden="true">&#8594;</span></a>' +
           '<span class="mono">Availability subject to specification</span>' +
@@ -303,17 +326,6 @@
     host.appendChild(panel);
     panelCanvas = panel.querySelector(".metal-panel__canvas");
     renderPanelField();
-
-    var btn = panel.querySelector("[data-enquire]");
-    if (btn) {
-      btn.addEventListener("click", function () {
-        var sel = $("#f-metal");
-        if (sel) {
-          sel.value = m.name;
-          sel.closest(".field").classList.remove("has-error");
-        }
-      });
-    }
 
     if (scrollTo) {
       var target = document.getElementById("metals");
@@ -426,17 +438,6 @@
     var form = $("#enquiryForm");
     if (!form) return;
 
-    var metalSel = $("#f-metal");
-    METALS.forEach(function (m) {
-      metalSel.appendChild(new Option(m.name, m.name));
-    });
-    metalSel.appendChild(new Option("Other", "Other"));
-
-    var formSel = $("#f-form");
-    (COMPANY.enquiry ? COMPANY.enquiry.forms : []).forEach(function (f) {
-      formSel.appendChild(new Option(f, f));
-    });
-
     var status = $("#formStatus");
     var btn = $("#submitBtn");
 
@@ -446,13 +447,25 @@
       input.setAttribute("aria-invalid", on ? "true" : "false");
     }
 
+    // Mirrors the rules in lib/enquiry.ts so the static build and the app agree.
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    // Deliberately permissive: international numbers vary too much to match
+    // strictly, so this only checks shape plus a 7-15 digit count.
+    var PHONE_RE = /^\+?[\d\s().-]{7,}$/;
+
     function validate() {
       var invalid = [];
       var required = form.querySelectorAll("[required]");
       for (var i = 0; i < required.length; i++) {
         var f = required[i];
-        var ok = f.value.trim() !== "";
-        if (ok && f.type === "email") ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.value.trim());
+        var v = f.value.trim();
+        var ok = v !== "";
+        if (ok && f.name === "email") ok = EMAIL_RE.test(v);
+        if (ok && f.name === "phone") {
+          var digits = (v.match(/\d/g) || []).length;
+          ok = PHONE_RE.test(v) && digits >= 7 && digits <= 15;
+        }
+        if (ok && f.name === "message") ok = v.length >= 10;
         setError(f, !ok);
         if (!ok) invalid.push(f);
       }
@@ -489,28 +502,23 @@
       btn.classList.add("is-busy");
 
       var d = {};
-      ["metal", "purity", "form", "quantity", "application", "company", "name", "email", "phone", "notes"]
-        .forEach(function (k) {
-          var f = form.elements[k];
-          d[k] = f ? f.value.trim() : "";
-        });
+      ["name", "company", "phone", "email", "message"].forEach(function (k) {
+        var f = form.elements[k];
+        d[k] = f ? f.value.trim() : "";
+      });
 
       var lines = [
-        "Metal: " + d.metal,
-        "Purity: " + d.purity,
-        "Form: " + d.form,
-        "Quantity: " + d.quantity,
-        d.application ? "Application: " + d.application : "",
-        "",
-        "Company: " + d.company,
         "Name: " + d.name,
+        "Company: " + d.company,
+        "Phone: " + d.phone,
         "Email: " + d.email,
-        d.phone ? "Phone: " + d.phone : "",
-        d.notes ? "\nFurther detail:\n" + d.notes : ""
-      ].filter(Boolean).join("\n");
+        "",
+        "Message:",
+        d.message
+      ].join("\n");
 
-      var subject = "Enquiry — " + d.metal + " · " + d.purity + " · " + d.form + " · " + d.quantity;
-      var href = "mailto:sales@bhoverseas.com?subject=" + encodeURIComponent(subject) +
+      var subject = "Enquiry — " + d.company + " (" + d.name + ")";
+      var href = "mailto:info@bhoverseas.com?subject=" + encodeURIComponent(subject) +
                  "&body=" + encodeURIComponent(lines);
 
       // The static build has no server, so the enquiry is handed to the
@@ -522,9 +530,9 @@
         status.hidden = false;
         status.className = "form-status";
         status.innerHTML =
-          "<b>Your specification is ready to send.</b> Your email application has opened with " +
-          "the details composed. If nothing opened, email <a class=\"link\" href=\"mailto:sales@bhoverseas.com\">" +
-          "sales@bhoverseas.com</a> with the metal, purity, form and quantity you require.";
+          "<b>Your enquiry is ready to send.</b> Your email application has opened with " +
+          "the details composed. If nothing opened, email <a class=\"link\" href=\"mailto:info@bhoverseas.com\">" +
+          "info@bhoverseas.com</a> directly.";
         status.focus && status.focus();
       }, 420);
     });
@@ -532,6 +540,7 @@
 
   /* =============================================================== init == */
   function init() {
+    buildHeroIndex();
     buildIndexBar();
     buildSpecimens();
     buildCaps();

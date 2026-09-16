@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-const SELECTOR = "[data-reveal], .reveal-lines, .mask-reveal, .principle";
+const SELECTOR = "[data-reveal], .reveal-lines, .mask-reveal, .principle, .caps";
 
 /**
  * One IntersectionObserver for every reveal on the page.

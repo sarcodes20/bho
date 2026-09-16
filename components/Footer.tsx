@@ -1,12 +1,6 @@
 import { COMPANY } from "@/data/company";
 
 export default function Footer() {
-  const emails = [
-    COMPANY.emails.primary,
-    COMPANY.emails.general,
-    COMPANY.emails.sales,
-  ];
-
   return (
     <footer className="footer">
       <div className="shell">
@@ -30,11 +24,7 @@ export default function Footer() {
           <div>
             <p className="footer__col-title">Contact</p>
             <div className="footer__list">
-              {emails.map((email) => (
-                <a key={email} href={`mailto:${email}`}>
-                  {email}
-                </a>
-              ))}
+              <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
             </div>
           </div>
         </div>

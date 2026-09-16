@@ -18,7 +18,9 @@ export const METALS: Metal[] = [
     symbol: "Pt",
     name: "Platinum",
     number: 78,
-    mass: "195.08",
+    mass: "195.084",
+    density: "21.45",
+    meltingPoint: "1768",
     tagline: ["Rare", "Stable", "Catalytic"],
     description:
       "Platinum is a rare precious metal known for its excellent corrosion resistance, catalytic properties and high-temperature stability.",
@@ -51,6 +53,8 @@ export const METALS: Metal[] = [
     name: "Palladium",
     number: 46,
     mass: "106.42",
+    density: "12.02",
+    meltingPoint: "1555",
     tagline: ["Catalytic", "Chemical", "Conductive"],
     description:
       "Palladium is an important Platinum Group Metal valued for its catalytic, chemical and electrical properties.",
@@ -79,7 +83,9 @@ export const METALS: Metal[] = [
     symbol: "Ir",
     name: "Iridium",
     number: 77,
-    mass: "192.22",
+    mass: "192.217",
+    density: "22.56",
+    meltingPoint: "2466",
     tagline: ["Rarest", "Corrosion-resistant", "High-temperature"],
     description:
       "Iridium is one of the rarest naturally occurring metals and is distinguished by its exceptional corrosion resistance and high-temperature properties.",
@@ -109,6 +115,8 @@ export const METALS: Metal[] = [
     name: "Ruthenium",
     number: 44,
     mass: "101.07",
+    density: "12.45",
+    meltingPoint: "2334",
     tagline: ["Hard", "Corrosion-resistant", "Electronic"],
     description:
       "Ruthenium is a hard and corrosion-resistant Platinum Group Metal with applications in electronics, catalysts and specialized industrial processes.",
@@ -137,7 +145,9 @@ export const METALS: Metal[] = [
     symbol: "Rh",
     name: "Rhodium",
     number: 45,
-    mass: "102.91",
+    mass: "102.906",
+    density: "12.41",
+    meltingPoint: "1964",
     tagline: ["Catalytic", "Reflective", "Corrosion-resistant"],
     description:
       "Rhodium is a rare Platinum Group Metal known for its catalytic properties, corrosion resistance and reflective characteristics.",
@@ -168,6 +178,8 @@ export const METALS: Metal[] = [
     name: "Osmium",
     number: 76,
     mass: "190.23",
+    density: "22.59",
+    meltingPoint: "3033",
     tagline: ["Dense", "Hard", "Wear-resistant"],
     description:
       "Osmium is an exceptionally rare and dense Platinum Group Metal, known for its high hardness and resistance to wear and corrosion.",

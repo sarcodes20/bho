@@ -277,29 +277,20 @@ export function Contact({ enquiryHref = "#enquiry" }: { enquiryHref?: string }) 
           </p>
           <div data-reveal style={{ ...delay(300), marginTop: "2.5rem" }}>
             <a className="btn" href={enquiryHref}>
-              Make an enquiry
+              Tell us your requirements
               <Arrow />
             </a>
           </div>
         </div>
 
+        {/* One published address, so one channel. The three-way split
+            (Enquiries / General / Direct) existed only to distinguish three
+            different addresses. */}
         <div className="contact__channels" data-reveal style={delay(160)}>
           <div className="channel">
-            <span className="channel__k">Enquiries</span>
-            <a className="channel__v link" href={`mailto:${COMPANY.emails.sales}`}>
-              {COMPANY.emails.sales}
-            </a>
-          </div>
-          <div className="channel">
-            <span className="channel__k">General</span>
-            <a className="channel__v link" href={`mailto:${COMPANY.emails.general}`}>
-              {COMPANY.emails.general}
-            </a>
-          </div>
-          <div className="channel">
-            <span className="channel__k">Direct</span>
-            <a className="channel__v link" href={`mailto:${COMPANY.emails.primary}`}>
-              {COMPANY.emails.primary}
+            <span className="channel__k">Email</span>
+            <a className="channel__v link" href={`mailto:${COMPANY.email}`}>
+              {COMPANY.email}
             </a>
           </div>
         </div>

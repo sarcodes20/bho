@@ -80,7 +80,7 @@ const organizationJsonLd = {
   url: COMPANY.meta.url,
   description: COMPANY.meta.description,
   foundingDate: COMPANY.foundedYear,
-  email: COMPANY.emails.general,
+  email: COMPANY.email,
   knowsAbout: [
     "Platinum Group Metals",
     "Precious metals refining",

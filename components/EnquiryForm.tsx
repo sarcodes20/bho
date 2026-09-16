@@ -1,13 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import type { ChangeEvent, FormEvent, ReactNode } from "react";
 import { COMPANY } from "@/data/company";
 import {
   EMPTY_ENQUIRY,
-  FORM_OPTIONS,
-  METAL_OPTIONS,
-  PREFILL_METAL_EVENT,
   mailtoHref,
   validateEnquiry,
   type Enquiry,
@@ -23,33 +20,27 @@ type Status =
 
 type Errors = Partial<Record<RequiredField, string>>;
 
-/** One cell of the specification grid. */
+/** One cell of the enquiry grid. */
 function Field({
   id,
   label,
   children,
   error,
   span,
-  optional,
 }: {
   id: string;
   label: string;
   children: ReactNode;
   error?: string;
   span?: boolean;
-  optional?: boolean;
 }) {
   return (
     <div className={`field${span ? " field--span2" : ""}${error ? " has-error" : ""}`}>
       <label className="field__label" htmlFor={id}>
         {label}{" "}
-        {optional ? (
-          <span className="field__opt">optional</span>
-        ) : (
-          <span className="field__req" aria-hidden="true">
-            *
-          </span>
-        )}
+        <span className="field__req" aria-hidden="true">
+          *
+        </span>
       </label>
       {children}
       <p className="field__error" id={`${id}-error`}>
@@ -66,33 +57,11 @@ export default function EnquiryForm() {
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const formRef = useRef<HTMLFormElement>(null);
 
-  /** The metal explorer can pre-select a metal before scrolling here. */
-  useEffect(() => {
-    const onPrefill = (e: Event) => {
-      const metal = (e as CustomEvent<string>).detail;
-      if (!METAL_OPTIONS.includes(metal)) return;
-      setValues((v) => {
-        const next: Enquiry = { ...v };
-        next.metal = metal;
-        return next;
-      });
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next.metal;
-        return next;
-      });
-    };
-    window.addEventListener(PREFILL_METAL_EVENT, onPrefill);
-    return () => window.removeEventListener(PREFILL_METAL_EVENT, onPrefill);
-  }, []);
-
   const set = (key: keyof Enquiry) => (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const value = e.target.value;
     setValues((v) => {
-      // Written through a typed local rather than a computed-key spread, which
-      // widens to an index signature and no longer satisfies Enquiry.
       const next: Enquiry = { ...v };
       next[key] = value;
       return next;
@@ -112,8 +81,7 @@ export default function EnquiryForm() {
   const focusFirstError = (found: Errors) => {
     const first = Object.keys(found)[0];
     if (!first) return;
-    const el = formRef.current?.querySelector<HTMLElement>(`#f-${first}`);
-    el?.focus();
+    formRef.current?.querySelector<HTMLElement>(`#f-${first}`)?.focus();
   };
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -184,90 +152,21 @@ export default function EnquiryForm() {
             Tell us what you need.
           </h2>
         </div>
-        <p className="enquiry__spec-line">
-          {COMPANY.enquiry.subtitle.map((s) => (
-            <span key={s}>{s}</span>
-          ))}
-        </p>
       </div>
 
       <form className="enquiry__form" ref={formRef} onSubmit={onSubmit} noValidate>
         <div className="field-grid">
-          <Field id="f-metal" label="Metal" error={errors.metal}>
-            <select
-              className="field__control"
-              id="f-metal"
-              name="metal"
-              value={values.metal}
-              onChange={set("metal")}
-              aria-invalid={Boolean(errors.metal)}
-              aria-describedby={describedBy("metal")}
-            >
-              <option value="">Select a metal</option>
-              {METAL_OPTIONS.map((m) => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-          </Field>
-
-          <Field id="f-purity" label="Purity" error={errors.purity}>
+          <Field id="f-name" label="Name" error={errors.name}>
             <input
               className="field__control"
-              id="f-purity"
-              name="purity"
+              id="f-name"
+              name="name"
               type="text"
-              placeholder="e.g. 99.95%"
-              value={values.purity}
-              onChange={set("purity")}
-              aria-invalid={Boolean(errors.purity)}
-              aria-describedby={describedBy("purity")}
-            />
-          </Field>
-
-          <Field id="f-form" label="Form" error={errors.form}>
-            <select
-              className="field__control"
-              id="f-form"
-              name="form"
-              value={values.form}
-              onChange={set("form")}
-              aria-invalid={Boolean(errors.form)}
-              aria-describedby={describedBy("form")}
-            >
-              <option value="">Select a form</option>
-              {FORM_OPTIONS.map((f) => (
-                <option key={f} value={f}>
-                  {f}
-                </option>
-              ))}
-            </select>
-          </Field>
-
-          <Field id="f-quantity" label="Quantity" error={errors.quantity}>
-            <input
-              className="field__control"
-              id="f-quantity"
-              name="quantity"
-              type="text"
-              placeholder="e.g. 500 g"
-              value={values.quantity}
-              onChange={set("quantity")}
-              aria-invalid={Boolean(errors.quantity)}
-              aria-describedby={describedBy("quantity")}
-            />
-          </Field>
-
-          <Field id="f-application" label="Application" optional span>
-            <input
-              className="field__control"
-              id="f-application"
-              name="application"
-              type="text"
-              placeholder="e.g. thermocouple wire, catalyst, electroplating"
-              value={values.application}
-              onChange={set("application")}
+              autoComplete="name"
+              value={values.name}
+              onChange={set("name")}
+              aria-invalid={Boolean(errors.name)}
+              aria-describedby={describedBy("name")}
             />
           </Field>
 
@@ -285,17 +184,19 @@ export default function EnquiryForm() {
             />
           </Field>
 
-          <Field id="f-name" label="Name" error={errors.name}>
+          <Field id="f-phone" label="Phone number" error={errors.phone}>
             <input
               className="field__control"
-              id="f-name"
-              name="name"
-              type="text"
-              autoComplete="name"
-              value={values.name}
-              onChange={set("name")}
-              aria-invalid={Boolean(errors.name)}
-              aria-describedby={describedBy("name")}
+              id="f-phone"
+              name="phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              placeholder="Include country code"
+              value={values.phone}
+              onChange={set("phone")}
+              aria-invalid={Boolean(errors.phone)}
+              aria-describedby={describedBy("phone")}
             />
           </Field>
 
@@ -305,6 +206,7 @@ export default function EnquiryForm() {
               id="f-email"
               name="email"
               type="email"
+              inputMode="email"
               autoComplete="email"
               placeholder="name@company.com"
               value={values.email}
@@ -314,39 +216,30 @@ export default function EnquiryForm() {
             />
           </Field>
 
-          <Field id="f-phone" label="Phone" optional>
-            <input
-              className="field__control"
-              id="f-phone"
-              name="phone"
-              type="tel"
-              autoComplete="tel"
-              placeholder="Include country code"
-              value={values.phone}
-              onChange={set("phone")}
-            />
-          </Field>
-
-          <Field id="f-notes" label="Further detail" optional span>
+          <Field id="f-message" label="Message" error={errors.message} span>
             <textarea
               className="field__control"
-              id="f-notes"
-              name="notes"
-              rows={4}
-              placeholder="Delivery timeline, documentation, assay requirements, or anything else relevant to the specification."
-              value={values.notes}
-              onChange={set("notes")}
+              id="f-message"
+              name="message"
+              rows={5}
+              placeholder="Tell us the metal, purity, form and quantity you require, and anything else relevant."
+              value={values.message}
+              onChange={set("message")}
+              aria-invalid={Boolean(errors.message)}
+              aria-describedby={describedBy("message")}
             />
           </Field>
         </div>
 
         <div className="enquiry__foot">
           <p className="enquiry__note">{COMPANY.enquiry.note}</p>
-          <button className={`btn${busy ? " is-busy" : ""}`} type="submit" disabled={busy}>
+          <button
+            className={`btn btn--accent${busy ? " is-busy" : ""}`}
+            type="submit"
+            disabled={busy}
+          >
             <span className="btn__spinner" aria-hidden="true" />
-            <span className="btn__text">
-              {busy ? "Submitting" : "Submit enquiry"}
-            </span>
+            <span className="btn__text">{busy ? "Submitting" : "Submit enquiry"}</span>
             <span className="btn__arrow" aria-hidden="true">
               &#8594;
             </span>
@@ -382,27 +275,27 @@ function StatusPanel({ status }: { status: Status }) {
 
       {status.kind === "sent" && (
         <>
-          <b>Thank you — your enquiry has been received.</b> We will respond to
-          your specification by email.
+          <b>Thank you — your enquiry has been received.</b> We will respond by
+          email.
         </>
       )}
 
       {status.kind === "mailto" && (
         <>
-          <b>Your specification is ready to send.</b> Your email application has
-          opened with the details composed. If nothing opened, email{" "}
-          <a className="link" href={`mailto:${COMPANY.emails.sales}`}>
-            {COMPANY.emails.sales}
+          <b>Your enquiry is ready to send.</b> Your email application has opened
+          with the details composed. If nothing opened, email{" "}
+          <a className="link" href={`mailto:${COMPANY.email}`}>
+            {COMPANY.email}
           </a>{" "}
-          with the metal, purity, form and quantity you require.
+          directly.
         </>
       )}
 
       {status.kind === "error" && (
         <>
           <b>Your enquiry could not be submitted.</b> Please try again, or email{" "}
-          <a className="link" href={`mailto:${COMPANY.emails.sales}`}>
-            {COMPANY.emails.sales}
+          <a className="link" href={`mailto:${COMPANY.email}`}>
+            {COMPANY.email}
           </a>{" "}
           directly.
         </>

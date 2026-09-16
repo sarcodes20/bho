@@ -17,8 +17,10 @@
   -webkit-backdrop-filter: saturate(160%) blur(18px);
   border-bottom-color: var(--rule);
 }
-.nav.is-hidden { transform: translateY(-100%); }
-.nav { transition-property: background-color, border-color, transform; }
+/* The navigation stays visible for the whole scroll. It previously slid out of
+   view on downward scroll; that behaviour was removed at the client's request.
+   The solid/blurred surface on scroll is unchanged. */
+.nav { transition-property: background-color, border-color; }
 
 .nav__inner {
   display: flex; align-items: center; gap: var(--sp-6);
@@ -51,7 +53,7 @@
 }
 .nav__link::after {
   content: ""; position: absolute; left: 0; bottom: 0;
-  width: 100%; height: 1px; background: var(--gold);
+  width: 100%; height: 1px; background: var(--accent);
   transform: scaleX(0); transform-origin: right;
   transition: transform var(--dur-2) var(--ease);
 }
@@ -60,7 +62,14 @@
   transform: scaleX(1); transform-origin: left;
 }
 
-.nav__cta { flex: none; padding: 0.8rem 1.35rem; }
+/* The single blue element in the navigation. */
+.nav__cta {
+  flex: none; padding: 0.8rem 1.35rem;
+  color: var(--accent);
+  border-color: var(--accent-line);
+}
+.nav__cta::after { background: var(--accent); }
+.nav__cta:hover, .nav__cta:focus-visible { color: var(--obsidian); border-color: var(--accent); }
 
 .nav__toggle {
   display: none; flex: none; margin-left: auto;
@@ -106,7 +115,7 @@
 .nav__drawer.is-open .nav__drawer-link { opacity: 1; transform: none; }
 .nav__drawer-link .idx {
   font-family: var(--font-sans); font-size: 0.625rem; font-weight: 500;
-  letter-spacing: 0.16em; color: var(--gold); flex: none;
+  letter-spacing: 0.16em; color: var(--accent); flex: none;
 }
 .nav__drawer-foot {
   margin-top: auto; padding-top: 2.5rem;
@@ -129,28 +138,50 @@ body.is-locked { overflow: hidden; }
   isolation: isolate;
 }
 
-.hero__media { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
+.hero__media { position: absolute; inset: 0; z-index: -4; overflow: hidden; }
 .hero__img {
   width: 100%; height: 100%;
   object-fit: cover;
-  object-position: 62% 50%;
-  /* Art direction: the supplied macro is graded to graphite so the
-     material reads as cinematic rather than as a catalogue photograph. */
-  filter: grayscale(1) contrast(1.24) brightness(0.56) blur(0.4px);
-  transform: scale(1.08);
+  /* Extreme crop. At 1:1 the source reads as "a pile of metal"; pushed to
+     1.55 and framed off-centre, individual granules become terrain and the
+     frame reads as a macro landscape. It also puts the softest part of the
+     source outside the frame. */
+  object-position: 58% 64%;
+  /* The scale is a responsive decision and stays in CSS; the parallax script
+     only writes --hero-shift, so the two never fight over `transform`. */
+  --hero-scale: 1.55;
+  --hero-shift: 0px;
+  transform: scale(var(--hero-scale)) translate3d(0, var(--hero-shift), 0);
+  filter: grayscale(1) contrast(1.32) brightness(0.52);
   will-change: transform;
 }
-/* Lays a cool blue-graphite cast over the warm-neutral source. */
+
+/* Darkens and shapes the plate. Cool, never blue — the blue arrives above. */
 .hero__grade {
-  position: absolute; inset: 0; z-index: -2;
-  background: linear-gradient(180deg, rgba(11,12,13,0.55) 0%, rgba(11,12,13,0.1) 35%, rgba(11,12,13,0.86) 100%),
-              linear-gradient(90deg, var(--obsidian) 0%, rgba(11,12,13,0.92) 26%, rgba(11,12,13,0.38) 62%, rgba(11,12,13,0.7) 100%),
-              radial-gradient(120% 80% at 68% 42%, rgba(120,140,165,0.13) 0%, transparent 62%);
+  position: absolute; inset: 0; z-index: -3;
+  background:
+    linear-gradient(180deg, rgba(11,12,13,0.62) 0%, rgba(11,12,13,0.08) 34%, rgba(11,12,13,0.90) 100%),
+    linear-gradient(90deg, var(--obsidian) 0%, rgba(11,12,13,0.94) 24%, rgba(11,12,13,0.30) 64%, rgba(11,12,13,0.72) 100%);
 }
+
+/* ---- the signature: platinum under cool light -------------------------
+   color-dodge only lifts pixels that are already bright, so the cyan lands
+   on the granules' specular faces and nowhere else. A flat blue overlay
+   would tint the whole frame and read as a gradient; this reads as light
+   reflecting off metal, which is the entire idea. */
+.hero__light {
+  position: absolute; inset: 0; z-index: -2;
+  mix-blend-mode: color-dodge;
+  background:
+    radial-gradient(38% 32% at 76% 24%, rgba(33,182,211,0.16) 0%, rgba(33,182,211,0.05) 42%, transparent 66%),
+    radial-gradient(26% 24% at 44% 80%, rgba(7,159,192,0.07) 0%, transparent 68%);
+  pointer-events: none;
+}
+
 /* A single slow sweep of light across the material. */
 .hero__sweep {
-  position: absolute; inset: -20% -60%; z-index: -2;
-  background: linear-gradient(100deg, transparent 38%, rgba(228,229,227,0.055) 48%, rgba(228,229,227,0.10) 51%, rgba(228,229,227,0.055) 54%, transparent 64%);
+  position: absolute; inset: -20% -60%; z-index: -1;
+  background: linear-gradient(100deg, transparent 38%, rgba(228,229,227,0.05) 48%, rgba(180,230,242,0.09) 51%, rgba(228,229,227,0.05) 54%, transparent 64%);
   animation: sweep 13s var(--ease-io) infinite;
   pointer-events: none;
 }
@@ -167,13 +198,38 @@ body.is-locked { overflow: hidden; }
   padding-block: clamp(3rem, 1rem + 8vw, 7rem);
 }
 
-.hero__eyebrow { margin-bottom: clamp(1.5rem, 0.8rem + 3vw, 2.75rem); }
+.hero__eyebrow { margin-bottom: clamp(1.25rem, 0.7rem + 2.4vw, 2.25rem); }
 
-.hero__title { max-width: 20ch; margin-bottom: clamp(1.5rem, 1rem + 2.2vw, 2.5rem); }
-.hero__title .line > span { text-shadow: 0 1px 40px rgba(11,12,13,0.55); }
+/* Extreme scale contrast: a spoken first line, then the claim at the top of
+   the scale. The jump is the point — two lines at one size is a brochure. */
+.hero__title { margin-bottom: clamp(2rem, 1.2rem + 3.2vw, 3.5rem); }
+.hero__title .line > span { text-shadow: 0 1px 40px rgba(11,12,13,0.5); }
+.hero__title .line--sm > span {
+  font-size: var(--step-3);
+  color: var(--platinum);
+  letter-spacing: -0.012em;
+  padding-left: 0.14em;   /* optical: aligns to the cap of the line below */
+}
+.hero__title .line--xl > span {
+  font-size: var(--step-7);
+  line-height: 0.88;
+  letter-spacing: -0.034em;
+}
 
-.hero__lede { margin-bottom: clamp(2rem, 1.4rem + 2.6vw, 3rem); max-width: 52ch; color: var(--platinum); }
-
+/* Asymmetric close: actions left, the one paragraph set narrow and right. */
+.hero__meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+  align-items: end;
+}
+.hero__lede {
+  font-size: var(--step-0);
+  line-height: 1.6;
+  max-width: 38ch;
+  color: var(--platinum);
+  margin: 0;
+}
 .hero__actions { display: flex; flex-wrap: wrap; gap: 0.85rem; }
 
 /* Foot rail: scroll cue + the quiet factual anchor */
@@ -195,7 +251,7 @@ body.is-locked { overflow: hidden; }
 }
 .hero__scroll-track::after {
   content: ""; position: absolute; inset: 0;
-  background: var(--gold);
+  background: var(--accent);
   animation: scrollcue 2.6s var(--ease-io) infinite;
 }
 @keyframes scrollcue {
@@ -203,7 +259,24 @@ body.is-locked { overflow: hidden; }
   55%  { transform: translateY(0); }
   100% { transform: translateY(100%); }
 }
-.hero__stamp { text-align: right; }
+
+/* The six, as a technical index rather than a tagline. Symbol in platinum,
+   atomic number in blue — the first statement of the data/accent pairing
+   that runs through the whole site. */
+.hero__index {
+  display: flex; align-items: baseline;
+  gap: clamp(0.85rem, 0.3rem + 1.4vw, 1.75rem);
+  margin-left: auto;
+}
+.hero__index li {
+  display: inline-flex; align-items: baseline; gap: 0.3rem;
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}
+.hero__index .sym { color: var(--platinum); font-weight: 500; }
+.hero__index .num { color: var(--accent); font-size: 0.625rem; }
 
 /* ====================================================== METAL INDEX BAR == */
 .index-bar { border-block: 1px solid var(--rule); background: var(--obsidian); }
@@ -296,11 +369,36 @@ body.is-locked { overflow: hidden; }
 .metal-tab[aria-selected="true"] .metal-tab__field { opacity: 0.92; transform: scale(1); }
 .metal-tab::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
-  background: var(--gold);
+  background: var(--accent);
   transform: scaleX(0); transform-origin: left;
   transition: transform var(--dur-3) var(--ease);
 }
 .metal-tab[aria-selected="true"]::after { transform: scaleX(1); }
+
+/* Selection reads as an instrument acquiring a sample: a hairline frame and
+   a faint inner glow, drawn over the material rather than tinting it. */
+.metal-tab__frame {
+  position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 0 1px transparent;
+  transition: box-shadow var(--dur-3) var(--ease);
+}
+.metal-tab[aria-selected="true"] .metal-tab__frame {
+  box-shadow:
+    inset 0 0 0 1px var(--accent-line),
+    inset 0 0 24px rgba(33, 182, 211, 0.10);
+}
+/* Corner ticks — a register mark, not a border. */
+.metal-tab__frame::before,
+.metal-tab__frame::after {
+  content: ""; position: absolute; width: 7px; height: 7px;
+  border: 1px solid var(--accent);
+  opacity: 0;
+  transition: opacity var(--dur-2) var(--ease);
+}
+.metal-tab__frame::before { top: 6px; left: 6px; border-right: 0; border-bottom: 0; }
+.metal-tab__frame::after { bottom: 8px; right: 6px; border-left: 0; border-top: 0; }
+.metal-tab[aria-selected="true"] .metal-tab__frame::before,
+.metal-tab[aria-selected="true"] .metal-tab__frame::after { opacity: 1; }
 
 .metal-tab__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; }
 .metal-tab__num {
@@ -329,9 +427,11 @@ body.is-locked { overflow: hidden; }
 }
 .metal-tab:hover .metal-tab__sym,
 .metal-tab[aria-selected="true"] .metal-tab__sym { color: var(--white); }
-.metal-tab:hover .metal-tab__name, .metal-tab:hover .metal-tab__num,
-.metal-tab[aria-selected="true"] .metal-tab__name,
-.metal-tab[aria-selected="true"] .metal-tab__num { color: var(--soft-silver); }
+.metal-tab:hover .metal-tab__name,
+.metal-tab[aria-selected="true"] .metal-tab__name { color: var(--soft-silver); }
+/* The atomic number is the datum, so it carries the accent when live. */
+.metal-tab:hover .metal-tab__num { color: var(--soft-silver); }
+.metal-tab[aria-selected="true"] .metal-tab__num { color: var(--accent); }
 
 /* --- detail panel -------------------------------------------------------- */
 .metal-panel {
@@ -350,10 +450,21 @@ body.is-locked { overflow: hidden; }
   isolation: isolate;
 }
 .metal-panel__canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* Same principle as the hero: cool light caught on the specular faces of the
+   material, so the accent appears to belong to the metal rather than being
+   painted over it. Sits under the vignette so edges stay dark. */
+.metal-panel__light {
+  position: absolute; inset: 0; z-index: 1;
+  mix-blend-mode: color-dodge;
+  background: radial-gradient(60% 50% at 30% 22%, rgba(33,182,211,0.18) 0%, rgba(7,159,192,0.05) 48%, transparent 76%);
+  pointer-events: none;
+}
+
 .metal-panel__visual::after {
   /* vignette keeps the material sitting inside the frame */
-  content: ""; position: absolute; inset: 0;
-  background: radial-gradient(110% 85% at 50% 45%, transparent 32%, rgba(11,12,13,0.72) 100%);
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: radial-gradient(110% 85% at 50% 45%, transparent 32%, rgba(11,12,13,0.74) 100%);
   pointer-events: none;
 }
 .metal-panel__glyph {
@@ -373,8 +484,40 @@ body.is-locked { overflow: hidden; }
 .metal-panel__glyph-num {
   font-size: var(--step--2); font-weight: 500;
   letter-spacing: 0.32em; text-transform: uppercase;
-  color: var(--white); text-indent: 0.32em;
+  color: var(--accent); text-indent: 0.32em;
   text-shadow: 0 1px 14px rgba(11, 12, 13, 0.95);
+}
+
+/* ---- technical readout ------------------------------------------------
+   Objective physical constants, not company claims. They do the work of
+   making the section read as a materials database rather than a catalogue. */
+.metal-data {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--rule);
+}
+.metal-data__cell {
+  padding: 0.85rem 0 0.9rem;
+  border-bottom: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 0.4rem;
+}
+.metal-data__cell:nth-child(odd) { border-right: 1px solid var(--rule); padding-right: 1.25rem; }
+.metal-data__cell:nth-child(even) { padding-left: 1.25rem; }
+.metal-data__k {
+  font-size: 0.5625rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.metal-data__v {
+  font-size: var(--step-1);
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.metal-data__v .unit {
+  font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--fg-faint); margin-left: 0.4rem;
 }
 
 .metal-panel__body { padding: clamp(1.75rem, 1rem + 2.6vw, 3.25rem); display: flex; flex-direction: column; gap: 2rem; }
@@ -384,7 +527,7 @@ body.is-locked { overflow: hidden; }
 .metal-panel__tagline {
   display: flex; flex-wrap: wrap; gap: 0.5rem 1rem;
   font-size: var(--step--2); letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
 }
 .metal-panel__tagline span { position: relative; }
 .metal-panel__tagline span + span::before {
@@ -406,7 +549,7 @@ body.is-locked { overflow: hidden; }
   color: var(--soft-silver);
   transition: border-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
 }
-.spec__chip:hover { border-color: var(--gold); color: var(--white); }
+.spec__chip:hover { border-color: var(--accent); color: var(--white); }
 .spec__inline { color: var(--fg-muted); font-size: var(--step--1); line-height: 1.9; }
 .spec__inline b { font-weight: 400; color: var(--soft-silver); }
 
@@ -464,7 +607,25 @@ body.is-locked { overflow: hidden; }
 .specimen__note { font-size: var(--step--1); color: var(--fg-muted); line-height: 1.55; }
 
 /* ========================================================= CAPABILITIES == */
-.caps { display: grid; grid-template-columns: 1fr; }
+/* ---- the process spine ------------------------------------------------
+   A single blue line runs down the capabilities and each stage sits on a
+   node. It is the material moving through the business, drawn once, rather
+   than four boxes that happen to be stacked. */
+.caps {
+  display: grid; grid-template-columns: 1fr;
+  position: relative;
+  padding-left: 1.75rem;
+}
+.caps::before {
+  content: ""; position: absolute;
+  left: 3px; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(180deg,
+    transparent 0%, var(--accent-line) 8%, var(--accent-line) 88%, transparent 100%);
+  transform: scaleY(0); transform-origin: top;
+  transition: transform 1.6s var(--ease);
+}
+.caps.is-revealed::before { transform: scaleY(1); }
+
 .cap {
   position: relative;
   display: grid; grid-template-columns: 1fr; gap: 0.9rem;
@@ -473,14 +634,24 @@ body.is-locked { overflow: hidden; }
   transition: background-color var(--dur-3) var(--ease);
 }
 .caps .cap:last-child { border-bottom: 1px solid var(--rule); }
+/* node on the spine */
 .cap::before {
-  content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px;
-  background: var(--gold);
-  transform: scaleX(0); transform-origin: left;
-  transition: transform var(--dur-4) var(--ease);
+  content: ""; position: absolute;
+  left: -1.75rem; top: clamp(1.95rem, 1.2rem + 2.4vw, 2.95rem);
+  width: 7px; height: 7px;
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  transition: background-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
 }
-.cap:hover::before { transform: scaleX(1); }
-.cap__idx { font-size: 0.625rem; font-weight: 500; letter-spacing: 0.2em; color: var(--gold); }
+.cap:hover::before {
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-wash);
+}
+.cap__idx {
+  font-size: 0.625rem; font-weight: 500; letter-spacing: 0.2em;
+  color: var(--accent); font-variant-numeric: tabular-nums;
+}
 .cap__name {
   font-family: var(--font-display);
   font-size: var(--step-3); line-height: 1; color: var(--fg-strong);
@@ -490,30 +661,51 @@ body.is-locked { overflow: hidden; }
 .cap__copy { color: var(--fg-muted); max-width: 48ch; line-height: 1.7; }
 
 /* =============================================== SECONDARY MATERIALS ===== */
+/* ---- the recovery route ----------------------------------------------
+   Same device as the capabilities spine, turned horizontal on wider screens.
+   The blue line is the through-line of the material; the boxes are gone. */
 .flow {
   display: grid;
   grid-template-columns: 1fr;
-  border: 1px solid var(--rule);
+  position: relative;
+  padding-left: 1.75rem;
+}
+.flow::before {
+  content: ""; position: absolute;
+  left: 3px; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(180deg, transparent 0%, var(--accent-line) 6%, var(--accent-line) 92%, transparent 100%);
 }
 .flow__step {
   position: relative;
-  display: flex; flex-direction: column; gap: 0.6rem;
-  padding: clamp(1.25rem, 0.8rem + 1.6vw, 2rem);
+  display: flex; flex-direction: column; gap: 0.5rem;
+  padding: clamp(1rem, 0.7rem + 1.1vw, 1.5rem) 0;
   border-top: 1px solid var(--rule);
   transition: background-color var(--dur-2) var(--ease);
 }
 .flow__step:first-child { border-top: 0; }
-.flow__step:hover { background: rgba(228,229,227,0.025); }
+.flow__step::before {
+  content: ""; position: absolute;
+  left: -1.75rem; top: clamp(1.25rem, 0.95rem + 1.1vw, 1.75rem);
+  width: 5px; height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.55;
+}
+.flow__step--terminal::before {
+  width: 7px; height: 7px; left: calc(-1.75rem - 1px);
+  opacity: 1;
+  box-shadow: 0 0 0 4px var(--accent-wash);
+}
 .flow__idx {
-  font-size: 0.5625rem; letter-spacing: 0.2em; color: var(--gold);
-  font-variant-numeric: tabular-nums;
+  font-size: 0.5625rem; letter-spacing: 0.2em; color: var(--accent);
+  font-variant-numeric: tabular-nums; opacity: 0.8;
 }
 .flow__name {
   font-size: var(--step--1); font-weight: 500;
   letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-strong);
 }
 .flow__note { font-size: var(--step--1); color: var(--fg-muted); line-height: 1.55; }
-.flow__step--terminal .flow__name { color: var(--gold); }
+.flow__step--terminal .flow__name { color: var(--accent); }
 
 .material-list { display: grid; grid-template-columns: 1fr; gap: 0; }
 .material-list li {
@@ -525,12 +717,12 @@ body.is-locked { overflow: hidden; }
 }
 .material-list li::before {
   content: ""; width: 4px; height: 4px; flex: none;
-  background: var(--gold); transform: translateY(-2px);
+  background: var(--accent); transform: translateY(-2px);
 }
 .caveat {
   margin-top: 1.5rem; padding: 1rem 1.25rem;
-  border-left: 1px solid var(--gold);
-  background: rgba(169,149,103,0.05);
+  border-left: 1px solid var(--accent);
+  background: var(--accent-wash);
   font-size: var(--step--1); color: var(--fg-muted); line-height: 1.6;
   max-width: 58ch;
 }
@@ -557,7 +749,9 @@ body.is-locked { overflow: hidden; }
 /* A rule that draws itself when the principle enters the viewport */
 .principle__line {
   position: absolute; left: 0; top: 0; height: 1px; width: 100%;
-  background: var(--gold);
+  /* Four full-strength blue rules stacked is the one place the accent tipped
+     into decoration. At line weight it still draws itself, without shouting. */
+  background: var(--accent-line);
   transform: scaleX(0); transform-origin: left;
   transition: transform 1.4s var(--ease);
   transition-delay: var(--reveal-delay, 0ms);
@@ -597,7 +791,7 @@ body.is-locked { overflow: hidden; }
 }
 .enquiry__spec-line {
   display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem;
-  font-size: var(--step--2); letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold);
+  font-size: var(--step--2); letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent);
 }
 .enquiry__form { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); }
 
@@ -611,7 +805,7 @@ body.is-locked { overflow: hidden; }
   font-size: 0.5625rem; font-weight: 500;
   letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-faint);
 }
-.field__req { color: var(--gold); }
+.field__req { color: var(--accent); }
 .field__opt { color: var(--fg-faint); opacity: 0.7; letter-spacing: 0.12em; text-transform: none; font-size: 0.625rem; }
 
 .field__control {
@@ -631,7 +825,7 @@ body.is-locked { overflow: hidden; }
 /* focus + validity rendered on the cell, not the input — keeps the grid crisp */
 .field::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
-  background: var(--gold);
+  background: var(--accent);
   transform: scaleX(0); transform-origin: left;
   transition: transform var(--dur-2) var(--ease);
 }
@@ -639,8 +833,8 @@ body.is-locked { overflow: hidden; }
 .field:focus-within { background: rgba(228,229,227,0.02); }
 
 select.field__control {
-  background-image: linear-gradient(45deg, transparent 50%, var(--fg-muted) 50%),
-                    linear-gradient(135deg, var(--fg-muted) 50%, transparent 50%);
+  background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%),
+                    linear-gradient(135deg, var(--accent) 50%, transparent 50%);
   background-position: right 1rem top calc(50% + 3px), right 0.7rem top calc(50% + 3px);
   background-size: 5px 5px, 5px 5px;
   background-repeat: no-repeat;
@@ -678,8 +872,8 @@ select.field__control option { background: var(--graphite); color: var(--white);
 .form-status {
   margin-top: 1.25rem;
   padding: 1rem 1.25rem;
-  border-left: 1px solid var(--gold);
-  background: rgba(169,149,103,0.06);
+  border-left: 1px solid var(--accent);
+  background: var(--accent-wash);
   font-size: var(--step--1);
   line-height: 1.6;
   color: var(--soft-silver);
@@ -727,12 +921,33 @@ select.field__control option { background: var(--graphite); color: var(--white);
 
 /* ============================================================== 768px+ == */
 @media (min-width: 48em) {
-  .specimens { grid-template-columns: repeat(3, 1fr); }
+  /* Specimens are deliberately unequal — three identical tiles is the single
+     most template-like shape on a page, and these are studio plates of
+     different subjects, not a product grid. */
+  .specimens { grid-template-columns: 1.35fr 1fr 1fr; align-items: start; }
+  .specimen:nth-child(2) { margin-top: clamp(2rem, 1rem + 3vw, 4.5rem); }
+  .specimen:nth-child(3) { margin-top: clamp(4rem, 2rem + 6vw, 9rem); }
+  .specimen:nth-child(1) .specimen__frame { aspect-ratio: 5 / 4; }
+  .specimen:nth-child(n+2) .specimen__frame { aspect-ratio: 3 / 4; }
+
   .field-grid { grid-template-columns: repeat(2, 1fr); }
   .field--span2 { grid-column: span 2; }
-  .flow { grid-template-columns: repeat(5, 1fr); }
-  .flow__step { border-top: 0; border-left: 1px solid var(--rule); }
-  .flow__step:first-child { border-left: 0; }
+
+  /* The route turns horizontal: one blue line, five nodes hanging from it. */
+  .flow {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    column-gap: clamp(1rem, 0.4rem + 1.6vw, 2rem);
+    padding-left: 0; padding-top: 2.5rem;
+  }
+  .flow::before {
+    left: 0; right: 0; top: 3px; bottom: auto;
+    width: auto; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--accent-line) 3%, var(--accent-line) 97%, transparent 100%);
+  }
+  .flow__step { border-top: 0; padding-top: 0; }
+  .flow__step::before { left: 0; top: -2.5rem; }
+  .flow__step--terminal::before { left: -1px; top: calc(-2.5rem - 1px); }
+
   .cap { grid-template-columns: 4rem minmax(0, 18rem) minmax(0, 1fr); gap: 2rem; align-items: baseline; }
   .principle { grid-template-columns: 5rem minmax(0, 1fr); gap: 2rem; align-items: start; }
   .principle__copy { grid-column: 2; }
@@ -742,6 +957,13 @@ select.field__control option { background: var(--graphite); color: var(--white);
   .footer__grid { grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr)); }
   .metal-panel { grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); gap: 0; }
   .metal-panel__visual { border-right: 1px solid var(--rule); }
+
+  /* Actions left, the single paragraph set narrow and right. */
+  .hero__meta {
+    grid-template-columns: auto minmax(0, 38ch);
+    justify-content: space-between;
+    gap: 2.5rem;
+  }
 }
 
 /* ============================================================== 1024px+ == */
@@ -766,6 +988,16 @@ select.field__control option { background: var(--graphite); color: var(--white);
   /* Two buttons at their content widths read as ragged on a narrow column. */
   .hero__actions { flex-direction: column; align-items: stretch; gap: 0.6rem; }
   .hero__actions .btn { width: 100%; }
+
+  /* A tall narrow frame already crops hard; 1.55 on top of that loses the
+     structure that makes the granules read as a landscape. */
+  .hero__img { --hero-scale: 1.18; object-position: 56% 58%; }
+  /* Bring the cool light into the part of the frame actually on screen. */
+  .hero__light {
+    background: radial-gradient(54% 26% at 62% 30%, rgba(33,182,211,0.16) 0%, rgba(33,182,211,0.05) 44%, transparent 70%);
+  }
+  .hero__index { gap: 0.6rem; }
+  .hero__index li { gap: 0.22rem; }
 
   .index-bar__inner { grid-template-columns: repeat(3, 1fr); }
   .index-bar__cell:nth-child(4) { border-left: 0; }

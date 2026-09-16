@@ -57,24 +57,61 @@ tools/                  serve.ps1, build-static-data.sh
 
 ## Design system
 
-**Principle: the material is the hero.** The palette is graphite, platinum and
-ivory — not gold, despite the business. Muted gold appears only as rules,
-markers and focus states, never as a fill.
+**Principle: the material is the hero.** The ground is graphite, platinum and
+ivory. One accent — platinum blue — carries identity and interaction.
 
 ```
 Obsidian #0B0C0D   Graphite #151719   Carbon  #222426
-Platinum #C7C9C8   Silver   #E4E5E3   Ivory   #F4F2ED
-Gold     #A99567   White    #FAFAF8
+Platinum #C7C9C8   Silver   #E4E5E3   Ivory   #F4F2ED   White #FAFAF8
+
+Blue bright #21B6D3   Blue #079FC0   Deep #087C98   Ink #06657C   Pale #DDF4F7
 ```
 
-Type pairs **Instrument Serif** (rarity, heritage) with **Inter** (precision,
-commerce) on a fluid scale from 375px to 1728px. Sections alternate dark → ivory
-→ dark so the page has rhythm rather than one unbroken black scroll.
+### One accent, not two
+
+The first build used a muted gold accent. It was **retired** rather than kept
+alongside the blue: a restrained identity carrying both a warm and a cool mark
+dilutes each, and neither ends up reading as the brand. Components never branch
+on theme — they use `--accent`, which resolves to the bright cyan on near-black
+and darkens to `--blue-ink` inside `.ctx-light` so contrast holds on ivory
+(5.5:1).
+
+**Blue is scarce by rule.** It appears on rules, technical data, interaction and
+material light — never as a fill, a heading, or a card border. Measured on the
+rendered homepage, 52 of 601 elements carry a blue mark (~9%), and nearly all of
+them are small: atomic numbers, hairlines, nodes, field underlines. The single
+filled-blue control on the entire site is **Submit enquiry** — the one action
+the page exists to produce.
+
+### Platinum under cool light
+
+The signature is not a blue overlay. `.hero__light` and `.metal-panel__light`
+use `mix-blend-mode: color-dodge`, which only lifts pixels that are *already*
+bright — so the cyan lands on the specular faces of the granules and nowhere
+else. A flat tint would read as a gradient; this reads as light reflecting off
+metal, which is the whole idea. The material itself stays neutral.
+
+### Typography
+
+**Instrument Serif** (rarity, heritage) with **Inter** (precision, commerce) on a
+fluid scale from 375px to 1728px. The hero deliberately jumps the scale — a
+spoken line at `--step-3`, then the claim at `--step-7` (up to 12rem), which is
+reserved for that one line and used nowhere else. Sections alternate dark →
+ivory → dark.
 
 Motion is restrained and purposeful: a slow light sweep across the hero, ~5%
-parallax, line-by-line heading reveals, mask wipes on images, a rule that draws
-itself beside each principle. Everything honours `prefers-reduced-motion`, in CSS
-and via Framer Motion's `MotionConfig reducedMotion="user"`.
+parallax, line-by-line heading reveals, mask wipes on images, a blue spine that
+draws itself down the capabilities. Everything honours `prefers-reduced-motion`,
+in CSS and via Framer Motion's `MotionConfig reducedMotion="user"`.
+
+### Where the template feel was removed
+
+Three equal specimen tiles, five equal route boxes and four stacked capability
+cards were the most template-like shapes on the page. They are now, respectively:
+an asymmetric plate layout at three different aspect ratios and vertical offsets;
+a single horizontal blue line with five nodes hanging from it; and a vertical
+blue spine with a node per capability. Copy was cut roughly 30% throughout —
+no facts removed, only repetition.
 
 ### Why the metals are drawn, not photographed
 
@@ -162,10 +199,13 @@ Verified in-browser against the static build at 1440×900, 768×1024 and 390×84
 - no console errors, no dead anchors, no duplicate IDs, no horizontal overflow
 - lazy loading and image delivery
 
-**Not verified: the Next.js build.** Node.js is not installed on the build
-machine, so `npm install`, `next build` and `tsc --noEmit` have never been run
-against this code. It was written carefully and reviewed by hand, but treat the
-first install as a real step:
+**Not verified: the Next.js build of the refinement pass.** The project has been
+installed, built and deployed (`node_modules/`, `.next/` and `.vercel/` are all
+present). But Node is not on the PATH of the machine this pass was made on, so
+`tsc --noEmit` and `next build` have **not** been re-run against the changed
+`.tsx` files. The CSS, data and material renderer are shared with the static
+build and are verified; the React edits are hand-reviewed only. Re-run before
+deploying:
 
 ```bash
 npm install

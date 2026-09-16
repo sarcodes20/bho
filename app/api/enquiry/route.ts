@@ -63,7 +63,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        to: COMPANY.emails.sales,
+        to: COMPANY.email,
         replyTo: values.email,
         subject,
         text: body,
