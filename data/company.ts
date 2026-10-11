@@ -27,7 +27,7 @@ export const COMPANY = {
     description:
       "BH Overseas sources, refines, trades and supplies Platinum Group Metals and selected specialty precious metals for industrial and specialized applications.",
     /** Overridden on demo and preview deployments; the real domain is the fallback. */
-    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bhoverseas.com",
+    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bhoverseas.in",
     locale: "en_IN",
   },
 

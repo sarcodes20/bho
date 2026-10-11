@@ -229,7 +229,7 @@ window.COMPANY = {
     description:
       "BH Overseas sources, refines, trades and supplies Platinum Group Metals and selected specialty precious metals for industrial and specialized applications.",
     /** Overridden on demo and preview deployments; the real domain is the fallback. */
-    url: "https://www.bhoverseas.com",
+    url: "https://www.bhoverseas.in",
     locale: "en_IN",
   },
 
