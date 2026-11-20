@@ -151,7 +151,20 @@ export default function Nav() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => {
-              if ((e.target as HTMLElement).closest("a")) close();
+              const link = (e.target as HTMLElement).closest("a");
+              if (!link) return;
+              const href = link.getAttribute("href") ?? "";
+              close();
+              // The open drawer locks page scrolling, so a same-page jump made
+              // while it is open goes nowhere. Close first, then scroll once the
+              // lock has been released.
+              if (href.startsWith("#")) {
+                e.preventDefault();
+                window.setTimeout(() => {
+                  document.getElementById(href.slice(1))?.scrollIntoView({ block: "start" });
+                  history.pushState(null, "", href);
+                }, 60);
+              }
             }}
           >
             {/* The links stagger from Motion rather than the CSS delays used
