@@ -66,6 +66,7 @@ export function Section({
   id,
   children,
   light = false,
+  tone,
   tight = false,
   className = "",
   style,
@@ -74,6 +75,12 @@ export function Section({
   id?: string;
   children: ReactNode;
   light?: boolean;
+  /**
+   * Background tone. Sections alternate tones so the page has rhythm rather
+   * than one unbroken black scroll: ivory and mist are light, graphite and
+   * midnight are dark variants of the base obsidian.
+   */
+  tone?: "ivory" | "mist" | "graphite" | "midnight";
   tight?: boolean;
   className?: string;
   style?: CSSProperties;
@@ -82,7 +89,8 @@ export function Section({
   const classes = [
     "section",
     tight ? "section--tight" : "",
-    light ? "ctx-light" : "",
+    light || tone === "ivory" || tone === "mist" ? "ctx-light" : "",
+    tone ? `tone-${tone}` : "",
     className,
   ]
     .filter(Boolean)

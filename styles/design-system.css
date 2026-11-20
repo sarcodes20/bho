@@ -342,3 +342,31 @@ button { background: none; border: 0; }
   .reveal-lines .line > span { transform: none; }
   .mask-reveal::after { display: none; }
 }
+
+/* ------------------------------------------------------------ section tones
+   The page used to be obsidian almost end to end. Each section now takes one
+   of four grounds so the scroll has rhythm. Two are light (ivory, a pale
+   platinum-blue mist) and two are tinted darks (graphite, a deep midnight
+   blue). The tones only re-point --bg and the rules; text colours follow the
+   light or dark context they belong to. */
+.tone-mist {
+  --bg:        #E8F1F3;
+  --bg-raised: #F6FAFB;
+  --rule:        rgba(6, 60, 74, 0.14);
+  --rule-strong: rgba(6, 60, 74, 0.28);
+  background: var(--bg);
+}
+.tone-graphite {
+  --bg:        var(--graphite);
+  --bg-raised: #1C1F22;
+  background: var(--bg);
+}
+.tone-midnight {
+  --bg:        #0B1A20;
+  --bg-raised: #10242C;
+  --rule:        rgba(33, 182, 211, 0.12);
+  --rule-strong: rgba(33, 182, 211, 0.24);
+  background:
+    radial-gradient(80% 60% at 85% 0%, rgba(7, 159, 192, 0.10) 0%, transparent 60%),
+    var(--bg);
+}

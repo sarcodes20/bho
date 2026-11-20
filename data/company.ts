@@ -32,7 +32,7 @@ export const COMPANY = {
   },
 
   /** The two dates the document establishes. Nothing is extrapolated from them. */
-  foundedYear: "2015",
+  foundedYear: "2010",
   incorporatedYear: "2026",
 
   /**
@@ -42,7 +42,7 @@ export const COMPANY = {
   email: "info@bhoverseas.com",
 
   hero: {
-    eyebrow: "Established 2015",
+    eyebrow: "In precious metals since 2010",
     /** Two lines, two sizes — the second is set at the top of the scale. */
     titleLead: "Rare metals.",
     titleMain: "Precisely handled.",
@@ -51,9 +51,9 @@ export const COMPANY = {
 
   statement: {
     eyebrow: "The company",
-    title: ["Experience since 2015.", "Precision for", "what comes next."],
+    title: ["Since 2010.", "Precision for", "what comes next."],
     copy: [
-      "Products are sourced and supplied to the specification, quantity and form each customer requires.",
+      "More than fifteen years in Platinum Group Metals, sourcing and supplying to the specification, quantity and form each customer requires.",
     ],
   },
 
@@ -61,9 +61,9 @@ export const COMPANY = {
     eyebrow: "About",
     title: ["Built around", "the material."],
     copy: [
-      "Engaged in Platinum Group Metals and other specialized precious metals since 2015, with experience in the sourcing, refining, trading and supply of these metals for industrial and specialized applications.",
+      "Engaged in Platinum Group Metals and other specialized precious metals since 2010, with more than fifteen years of experience in the sourcing, refining, trading and supply of these metals for industrial and specialized applications.",
       "The primary focus is Platinum, Palladium, Iridium, Ruthenium, Rhodium and Osmium. Requirements for other precious and specialty metals are evaluated on availability, specification and application.",
-      "Incorporated as a Private Limited Company in 2026, building on the experience developed since 2015.",
+      "Registered as a Limited Liability Partnership in 2015 and incorporated as a Private Limited Company in 2026, building on the experience developed since 2010.",
     ],
     facts: [
       { k: "Focus", v: "Platinum Group Metals" },
@@ -74,7 +74,8 @@ export const COMPANY = {
   },
 
   milestones: [
-    { year: "2015", label: "Engaged in the business of Platinum Group Metals and other specialized precious metals." },
+    { year: "2010", label: "Engaged in the business of Platinum Group Metals and other specialized precious metals." },
+    { year: "2015", label: "Registered as a Limited Liability Partnership." },
     { year: "2026", label: "Incorporated as a Private Limited Company." },
   ] as Milestone[],
 
@@ -146,7 +147,27 @@ export const COMPANY = {
    * The forms the company supplies, drawn from the per-metal form lists in the
    * product document. Shown as a technical index over the material band.
    */
-  forms: ["Sponge", "Powder", "Wire", "Sheet", "Plate", "Metal", "Scrap"],
+  forms: ["Sponge", "Scrap", "Precious metal chemicals", "Fabricated to requirement"],
+
+  /**
+   * Precious metal chemicals, supplied to the client's requirements. Names as
+   * the company gave them; formulas are the standard compounds those names
+   * refer to. Platinum chloride carries no formula until the company confirms
+   * which compound it supplies (PtCl2, PtCl4 or chloroplatinic acid).
+   */
+  chemicals: {
+    eyebrow: "Our products",
+    title: ["Precious metal", "chemicals."],
+    copy: "Platinum Group Metal chlorides, prepared to each client's requirements.",
+    items: [
+      { symbol: "Pt", name: "Platinum chloride", formula: "" },
+      { symbol: "Pd", name: "Palladium chloride", formula: "PdCl₂" },
+      { symbol: "Ir", name: "Iridium trichloride", formula: "IrCl₃" },
+      { symbol: "Ru", name: "Ruthenium trichloride", formula: "RuCl₃" },
+      { symbol: "Rh", name: "Rhodium trichloride", formula: "RhCl₃" },
+    ],
+    note: "Supplied as per the client's requirements.",
+  },
 
   /**
    * Supplied photography. The large granule macro carries the material band

@@ -6,6 +6,7 @@ import {
   About,
   Approach,
   Capabilities,
+  Chemicals,
   Contact,
   Metals,
   SecondaryMaterials,
@@ -25,6 +26,7 @@ export default function HomePage() {
 
       {/* The products. */}
       <Metals />
+      <Chemicals />
       <MaterialBand />
 
       {/* What we do with them. */}
@@ -33,7 +35,7 @@ export default function HomePage() {
       <Approach />
 
       {/* Conversion. */}
-      <Section id="enquiry" labelledBy="enquiryTitle">
+      <Section id="enquiry" tone="midnight" labelledBy="enquiryTitle">
         <EnquiryForm />
       </Section>
       <Contact />

@@ -20,17 +20,72 @@ function sanitise(input: Record<string, unknown>): Enquiry {
 }
 
 /**
- * Receives a specification enquiry.
+ * Sends the enquiry through Resend (resend.com). The message goes to the
+ * company inbox with Reply-To set to the visitor, so hitting Reply in Outlook
+ * answers the customer directly.
  *
- * Delivery is intentionally not wired to a provider: no mail credentials were
- * supplied with the brief, and guessing one would mean enquiries silently
- * failing in production. Until `ENQUIRY_WEBHOOK_URL` is set the route validates
- * and reports `delivered: false`, and the form falls back to opening the
- * visitor's mail client with the specification already composed — so an
- * enquiry is never lost.
+ * RESEND_API_KEY  required — enables delivery
+ * ENQUIRY_FROM    optional — sender, must be on a domain verified in Resend
+ *                 (default: "BH Overseas Website <website@bhoverseas.com>")
+ * ENQUIRY_TO      optional — recipient (default: the company address)
+ */
+async function sendWithResend(
+  apiKey: string,
+  values: Enquiry,
+  subject: string,
+  body: string
+): Promise<boolean> {
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from:
+        process.env.ENQUIRY_FROM ??
+        "BH Overseas Website <website@bhoverseas.com>",
+      to: [process.env.ENQUIRY_TO ?? COMPANY.email],
+      reply_to: values.email,
+      subject,
+      text: body,
+    }),
+  });
+  if (!res.ok) {
+    console.error("Resend rejected the enquiry:", res.status, await res.text());
+    return false;
+  }
+  return true;
+}
+
+/** Legacy path: any JSON endpoint (Zapier/Make hook, own SMTP relay). */
+async function sendWithWebhook(
+  url: string,
+  values: Enquiry,
+  subject: string,
+  body: string
+): Promise<boolean> {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      to: COMPANY.email,
+      replyTo: values.email,
+      subject,
+      text: body,
+      enquiry: values,
+    }),
+  });
+  return res.ok;
+}
+
+/**
+ * Receives an enquiry and emails it to the company.
  *
- * To deliver server-side, set ENQUIRY_WEBHOOK_URL to any endpoint that accepts
- * JSON (Resend, Postmark, a Zapier/Make hook, or your own SMTP service).
+ * With neither RESEND_API_KEY nor ENQUIRY_WEBHOOK_URL set, the route still
+ * validates and reports `delivered: false`, and the form falls back to opening
+ * the visitor's mail client with the enquiry composed, so nothing is lost.
+ * A failed send is reported the same way rather than as a success.
  */
 export async function POST(request: Request) {
   let payload: Record<string, unknown>;
@@ -52,31 +107,16 @@ export async function POST(request: Request) {
   }
 
   const { subject, body } = formatEnquiry(values);
+  const resendKey = process.env.RESEND_API_KEY;
   const webhook = process.env.ENQUIRY_WEBHOOK_URL;
 
-  if (!webhook) {
-    return NextResponse.json({ ok: true, delivered: false });
-  }
-
   try {
-    const res = await fetch(webhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        to: COMPANY.email,
-        replyTo: values.email,
-        subject,
-        text: body,
-        enquiry: values,
-      }),
-    });
-
-    if (!res.ok) throw new Error(`Upstream responded ${res.status}`);
-    return NextResponse.json({ ok: true, delivered: true });
+    let delivered = false;
+    if (resendKey) delivered = await sendWithResend(resendKey, values, subject, body);
+    else if (webhook) delivered = await sendWithWebhook(webhook, values, subject, body);
+    return NextResponse.json({ ok: true, delivered });
   } catch (error) {
     console.error("Enquiry delivery failed:", error);
-    // Reported as undelivered rather than as a success, so the form can fall
-    // back to the mail client instead of telling the visitor it was sent.
     return NextResponse.json({ ok: true, delivered: false });
   }
 }

@@ -24,8 +24,8 @@ export const METALS: Metal[] = [
     tagline: ["Rare", "Stable", "Catalytic"],
     description:
       "Platinum is a rare precious metal known for its excellent corrosion resistance, catalytic properties and high-temperature stability.",
-    forms: ["Sponge", "Powder", "Wire", "Sheet", "Plate", "Scrap"],
-    formsNote: "and other forms as required",
+    forms: ["Sponge", "Scrap"],
+    formsNote: "can also be fabricated to the client's requirements",
     applications: [
       "Thermocouples",
       "Laboratory equipment",
@@ -58,8 +58,8 @@ export const METALS: Metal[] = [
     tagline: ["Catalytic", "Chemical", "Conductive"],
     description:
       "Palladium is an important Platinum Group Metal valued for its catalytic, chemical and electrical properties.",
-    forms: ["Sponge", "Powder", "Wire", "Scrap"],
-    formsNote: "and other forms as required",
+    forms: ["Sponge", "Scrap"],
+    formsNote: "can also be fabricated to the client's requirements",
     applications: [
       "Catalysts",
       "Electronics",
@@ -89,8 +89,8 @@ export const METALS: Metal[] = [
     tagline: ["Rarest", "Corrosion-resistant", "High-temperature"],
     description:
       "Iridium is one of the rarest naturally occurring metals and is distinguished by its exceptional corrosion resistance and high-temperature properties.",
-    forms: ["Metal", "Sponge", "Powder", "Scrap"],
-    formsNote: "and other forms as required",
+    forms: ["Sponge", "Scrap"],
+    formsNote: "can also be fabricated to the client's requirements",
     applications: [
       "High-temperature equipment",
       "Electrochemical applications",
@@ -120,8 +120,8 @@ export const METALS: Metal[] = [
     tagline: ["Hard", "Corrosion-resistant", "Electronic"],
     description:
       "Ruthenium is a hard and corrosion-resistant Platinum Group Metal with applications in electronics, catalysts and specialized industrial processes.",
-    forms: ["Metal", "Powder", "Scrap"],
-    formsNote: "and other forms as required",
+    forms: ["Sponge", "Scrap"],
+    formsNote: "can also be fabricated to the client's requirements",
     applications: [
       "Electronics",
       "Electrical contacts",
@@ -151,8 +151,8 @@ export const METALS: Metal[] = [
     tagline: ["Catalytic", "Reflective", "Corrosion-resistant"],
     description:
       "Rhodium is a rare Platinum Group Metal known for its catalytic properties, corrosion resistance and reflective characteristics.",
-    forms: ["Metal", "Powder", "Sponge", "Scrap"],
-    formsNote: "and other forms as required",
+    forms: ["Sponge", "Scrap"],
+    formsNote: "can also be fabricated to the client's requirements",
     applications: [
       "Catalysts",
       "Chemical processing",
@@ -183,8 +183,8 @@ export const METALS: Metal[] = [
     tagline: ["Dense", "Hard", "Wear-resistant"],
     description:
       "Osmium is an exceptionally rare and dense Platinum Group Metal, known for its high hardness and resistance to wear and corrosion.",
-    forms: ["Metal", "Powder", "Compounds"],
-    formsNote: "and other forms subject to specific requirements and availability",
+    forms: ["Sponge", "Scrap"],
+    formsNote: "can also be fabricated to the client's requirements",
     applications: [
       "Specialized alloys",
       "Scientific and laboratory applications",

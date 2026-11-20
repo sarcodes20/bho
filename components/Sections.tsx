@@ -88,19 +88,48 @@ export function About() {
 /* =========================================================== METALS ===== */
 export function Metals() {
   return (
-    <Section id="metals" className="explorer" labelledBy="metalsTitle">
+    <Section id="metals" className="explorer" tone="midnight" labelledBy="metalsTitle">
       <div className="explorer__head">
         <div>
           <Eyebrow style={{ marginBottom: "1.75rem" }}>Our products</Eyebrow>
           <DisplayLines id="metalsTitle" lines={["The Platinum Group"]} />
         </div>
         <p className="body-copy" data-reveal style={{ ...delay(160), maxWidth: "34ch" }}>
-          Six metals form our principal focus. Select one to see the forms we
-          supply and the applications it serves.
+          Six metals form our principal focus. Select one to see its forms
+          and the applications it serves.
         </p>
       </div>
 
       <MetalExplorer />
+    </Section>
+  );
+}
+
+/* ======================================================== CHEMICALS ===== */
+export function Chemicals() {
+  const c = COMPANY.chemicals;
+  return (
+    <Section id="chemicals" tone="mist" tight labelledBy="chemicalsTitle">
+      <div className="explorer__head">
+        <div>
+          <Eyebrow style={{ marginBottom: "1.75rem" }}>{c.eyebrow}</Eyebrow>
+          <DisplayLines id="chemicalsTitle" size="md" lines={c.title} />
+        </div>
+        <p className="body-copy" data-reveal style={{ ...delay(160), maxWidth: "34ch" }}>
+          {c.copy}
+        </p>
+      </div>
+
+      <ul className="chems" data-reveal style={delay(120)}>
+        {c.items.map((item) => (
+          <li className="chem" key={item.name}>
+            <span className="chem__sym">{item.symbol}</span>
+            <span className="chem__formula">{item.formula || `${item.symbol}Clₓ`}</span>
+            <span className="chem__name">{item.name}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="chems__note" data-reveal style={delay(200)}>{c.note}</p>
     </Section>
   );
 }
@@ -114,7 +143,6 @@ export function Metals() {
  */
 export function MaterialBand() {
   const hero = COMPANY.specimens[0];
-  const refs = COMPANY.specimens.filter((s) => s.ref);
 
   return (
     <section className="materialband" aria-labelledby="formsTitle">
@@ -139,11 +167,8 @@ export function MaterialBand() {
         />
 
         <ul className="materialband__forms" data-reveal style={delay(160)}>
-          {COMPANY.forms.map((form, i) => (
-            <li key={form}>
-              <span className="idx">{String(i + 1).padStart(2, "0")}</span>
-              {form}
-            </li>
+          {COMPANY.forms.map((form) => (
+            <li key={form}>{form}</li>
           ))}
         </ul>
       </div>
@@ -154,17 +179,6 @@ export function MaterialBand() {
             Availability varies by metal and specification.
           </p>
 
-          {/* Small-format sources, kept small on purpose. */}
-          <div className="materialband__refs">
-            {refs.map((s) => (
-              <figure className="materialband__ref" key={s.src}>
-                <span className="materialband__ref-frame">
-                  <Image src={s.src} alt={s.alt} width={500} height={500} sizes="10vw" />
-                </span>
-                <figcaption>{s.tag}</figcaption>
-              </figure>
-            ))}
-          </div>
         </div>
       </div>
     </section>
@@ -174,15 +188,15 @@ export function MaterialBand() {
 /* ===================================================== CAPABILITIES ===== */
 export function Capabilities() {
   return (
-    <Section id="capabilities" labelledBy="capsTitle">
+    <Section id="capabilities" tone="ivory" tight labelledBy="capsTitle">
       <div className="explorer__head">
         <div>
-          <Eyebrow style={{ marginBottom: "1.75rem" }}>Capabilities</Eyebrow>
-          <DisplayLines id="capsTitle" lines={["From source", "to specification."]} />
+          <Eyebrow style={{ marginBottom: "1.5rem" }}>Capabilities</Eyebrow>
+          <DisplayLines id="capsTitle" size="md" lines={["From source", "to specification."]} />
         </div>
       </div>
 
-      <div className="caps">
+      <div className="caps caps--compact">
         {COMPANY.capabilities.map((c, i) => (
           <article className="cap" key={c.id} data-reveal style={delay(i * 90)}>
             <span className="cap__idx">{String(i + 1).padStart(2, "0")}</span>
@@ -202,7 +216,7 @@ export function SecondaryMaterials() {
     <Section
       id="secondary"
       labelledBy="secondaryTitle"
-      style={{ background: "var(--graphite)" }}
+      tone="graphite"
     >
       <div className="explorer__head">
         <div>
@@ -250,26 +264,24 @@ export function SecondaryMaterials() {
 /* ========================================================= APPROACH ===== */
 export function Approach() {
   return (
-    <Section id="approach" labelledBy="approachTitle">
-      <div className="explorer__head">
-        <div>
-          <Eyebrow style={{ marginBottom: "1.75rem" }}>Our approach</Eyebrow>
-          <DisplayLines id="approachTitle" lines={["Four principles."]} />
+    <Section id="approach" tone="mist" tight labelledBy="approachTitle">
+      {/* Compact by design: four short commitments in one row, not four
+          full-height sections. */}
+      <div className="approach">
+        <div className="approach__head">
+          <Eyebrow style={{ marginBottom: "1rem" }}>Our approach</Eyebrow>
+          <h2 className="approach__title" id="approachTitle">
+            Precision begins with knowing exactly what the material is.
+          </h2>
         </div>
-        <p className="body-copy" data-reveal style={{ ...delay(160), maxWidth: "32ch" }}>
-          Precision begins with knowing exactly what the material is.
-        </p>
-      </div>
-
-      <div className="principles">
-        {COMPANY.principles.map((p, i) => (
-          <article className="principle" key={p.name} style={delay(i * 120)}>
-            <span className="principle__line" aria-hidden="true" />
-            <span className="principle__idx">{String(i + 1).padStart(2, "0")}</span>
-            <h3 className="principle__name">{p.name}</h3>
-            <p className="principle__copy">{p.copy}</p>
-          </article>
-        ))}
+        <div className="principles">
+          {COMPANY.principles.map((p, i) => (
+            <article className="principle" key={p.name} data-reveal style={delay(i * 90)}>
+              <h3 className="principle__name">{p.name}</h3>
+              <p className="principle__copy">{p.copy}</p>
+            </article>
+          ))}
+        </div>
       </div>
     </Section>
   );

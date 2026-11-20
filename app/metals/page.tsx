@@ -5,6 +5,7 @@ import { COMPANY } from "@/data/company";
 import { DisplayLines, Eyebrow, Section } from "@/components/ui";
 import MetalExplorer from "@/components/MetalExplorer";
 import EnquiryForm from "@/components/EnquiryForm";
+import { Chemicals } from "@/components/Sections";
 
 export const metadata: Metadata = {
   title: "Products",
@@ -39,7 +40,7 @@ export default function MetalsPage() {
 
   return (
     <main id="main">
-      <Section className="explorer" style={{ paddingTop: "calc(var(--nav-h) + 4rem)" }}>
+      <Section className="explorer" tone="midnight" style={{ paddingTop: "calc(var(--nav-h) + 4rem)" }}>
         <div className="explorer__head">
           <div>
             <Eyebrow style={{ marginBottom: "1.75rem" }}>Our products</Eyebrow>
@@ -53,6 +54,8 @@ export default function MetalsPage() {
 
         <MetalExplorer />
       </Section>
+
+      <Chemicals />
 
       <Section light labelledBy="referenceTitle">
         <Eyebrow style={{ marginBottom: "1.75rem" }}>Reference</Eyebrow>
@@ -91,7 +94,7 @@ export default function MetalsPage() {
         </p>
       </Section>
 
-      <Section id="enquiry" labelledBy="enquiryTitle">
+      <Section id="enquiry" tone="midnight" labelledBy="enquiryTitle">
         <EnquiryForm />
       </Section>
 
