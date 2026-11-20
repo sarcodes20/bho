@@ -143,71 +143,88 @@ export default function Nav() {
 
       <AnimatePresence>
         {open && (
-          <motion.div
-            id="nav-drawer"
-            className="nav__drawer is-open"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            onClick={(e) => {
-              const link = (e.target as HTMLElement).closest("a");
-              if (!link) return;
-              const href = link.getAttribute("href") ?? "";
-              close();
-              // The open drawer locks page scrolling, so a same-page jump made
-              // while it is open goes nowhere. Close first, then scroll once the
-              // lock has been released.
-              if (href.startsWith("#")) {
-                e.preventDefault();
-                window.setTimeout(() => {
-                  document.getElementById(href.slice(1))?.scrollIntoView({ block: "start" });
-                  history.pushState(null, "", href);
-                }, 60);
-              }
-            }}
-          >
-            {/* The links stagger from Motion rather than the CSS delays used
-                in the static build: the drawer mounts already open, so a
-                class-driven transition would have no starting state to run
-                from. Motion's inline styles win over the class rule. */}
-            <nav className="nav__drawer-links" aria-label="Mobile">
-              {COMPANY.nav.map((item, i) => (
-                <motion.a
-                  key={item.href}
-                  className="nav__drawer-link"
-                  href={sectionHref(item.href)}
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    delay: 0.09 + i * 0.055,
-                    duration: 0.42,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                >
-                  <span className="idx">{String(i + 1).padStart(2, "0")}</span>
-                  {item.label}
-                </motion.a>
-              ))}
-            </nav>
-
+          <>
+            {/* Dims and softly blurs the page behind; tapping it closes. */}
             <motion.div
-              className="nav__drawer-foot"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.42, duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              key="scrim"
+              className="nav__scrim"
+              aria-hidden="true"
+              onClick={close}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            />
+
+            {/* A sheet that slides in from the right. Motion alone drives it:
+                the panel's CSS carries no transitions, so nothing fights the
+                animation frame by frame. */}
+            <motion.div
+              key="panel"
+              id="nav-drawer"
+              className="nav__panel"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
+              onClick={(e) => {
+                const link = (e.target as HTMLElement).closest("a");
+                if (!link) return;
+                const href = link.getAttribute("href") ?? "";
+                close();
+                // The open menu locks page scrolling, so a same-page jump made
+                // while it is open goes nowhere. Close first, then scroll once
+                // the lock has been released.
+                if (href.startsWith("#")) {
+                  e.preventDefault();
+                  window.setTimeout(() => {
+                    document.getElementById(href.slice(1))?.scrollIntoView({ block: "start" });
+                    history.pushState(null, "", href);
+                  }, 60);
+                }
+              }}
             >
-              <a className="btn" href={sectionHref("#enquiry")}>
-                Make an enquiry
-                <span className="btn__arrow" aria-hidden="true">
-                  &#8594;
-                </span>
-              </a>
-              <a className="nav__drawer-mail" href={`mailto:${COMPANY.email}`}>
-                {COMPANY.email}
-              </a>
+              <nav className="nav__drawer-links" aria-label="Mobile">
+                {COMPANY.nav.map((item, i) => (
+                  <motion.a
+                    key={item.href}
+                    className="nav__drawer-link"
+                    href={sectionHref(item.href)}
+                    initial={{ opacity: 0, x: 24 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: 0.16 + i * 0.045,
+                      duration: 0.45,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <span className="idx">{String(i + 1).padStart(2, "0")}</span>
+                    {item.label}
+                  </motion.a>
+                ))}
+              </nav>
+
+              <motion.div
+                className="nav__drawer-foot"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.42, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <a className="btn" href={sectionHref("#enquiry")}>
+                  Make an enquiry
+                  <span className="btn__arrow" aria-hidden="true">
+                    &#8594;
+                  </span>
+                </a>
+                <a className="nav__drawer-mail" href={`mailto:${COMPANY.email}`}>
+                  {COMPANY.email}
+                </a>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </MotionConfig>

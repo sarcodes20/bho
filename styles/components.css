@@ -1256,3 +1256,41 @@ select.field__control option { background: var(--graphite); color: var(--white);
 .materialband__forms { gap: 0.5rem 1rem; }
 .materialband__forms li { font-size: var(--step-0); }
 .materialband__forms li + li::before { content: "·"; margin-right: 1rem; color: var(--accent); }
+
+/* ===================================================== PHONE MENU SHEET == */
+/* The app's phone menu: a scrim over the page and a sheet that slides in from
+   the right. Every animated property here is driven by Motion, so these rules
+   deliberately carry no transitions; the older .nav__drawer rules (with CSS
+   transitions) remain only for the static preview build. */
+.nav__scrim {
+  position: fixed; inset: 0; z-index: 98;
+  background: rgba(5, 7, 8, 0.55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.nav__panel {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 99;
+  width: min(88vw, 26rem);
+  display: flex; flex-direction: column;
+  padding: calc(var(--nav-h) + 1.5rem) var(--gutter) 2.25rem;
+  background:
+    radial-gradient(90% 50% at 100% 0%, rgba(7, 159, 192, 0.10) 0%, transparent 60%),
+    var(--obsidian);
+  border-left: 1px solid var(--accent-line);
+  box-shadow: -24px 0 60px rgba(0, 0, 0, 0.45);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  will-change: transform;
+}
+.nav__panel .nav__drawer-link,
+.nav__panel .nav__drawer-foot {
+  transition: none;
+  opacity: 1;
+  transform: none;
+}
+.nav__panel .nav__drawer-link { font-size: var(--step-2); padding: 1rem 0; }
+/* On phones the sheet takes the full width, so the brand and close button in
+   the header sit cleanly over it instead of straddling its edge. */
+@media (max-width: 29.99em) {
+  .nav__panel { width: 100%; border-left: 0; box-shadow: none; }
+}
