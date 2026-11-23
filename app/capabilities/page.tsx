@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import {
   Capabilities,
   SecondaryMaterials,
-  MaterialBand,
   Contact,
 } from "@/components/Sections";
 
@@ -17,7 +16,6 @@ export default function CapabilitiesPage() {
   return (
     <main id="main" style={{ paddingTop: "var(--nav-h)" }}>
       <Capabilities />
-      <MaterialBand />
       <SecondaryMaterials />
       <Contact />
     </main>

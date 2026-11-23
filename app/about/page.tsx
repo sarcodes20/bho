@@ -4,7 +4,7 @@ import { About, Approach, Contact, Statement } from "@/components/Sections";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "BH Overseas has been engaged in Platinum Group Metals and other specialized precious metals since 2010, was registered as an LLP in 2015 and incorporated as a Private Limited Company in 2026.",
+    "BH Overseas has been engaged in Platinum Group Metals since 2010, was established as a proprietorship in 2015 and incorporated as a Private Limited Company in 2026.",
   alternates: { canonical: "/about" },
 };
 

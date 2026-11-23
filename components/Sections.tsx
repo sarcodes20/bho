@@ -1,5 +1,4 @@
 import type { CSSProperties } from "react";
-import Image from "next/image";
 import { COMPANY } from "@/data/company";
 import { Arrow, DisplayLines, Eyebrow, Section } from "@/components/ui";
 import MetalExplorer from "@/components/MetalExplorer";
@@ -32,15 +31,6 @@ export function Statement() {
               </p>
             ))}
           </div>
-
-          <ul className="milestones" data-reveal style={delay(280)}>
-            {COMPANY.milestones.map((m) => (
-              <li className="milestone" key={m.year}>
-                <span className="milestone__year">{m.year}</span>
-                <span className="milestone__label">{m.label}</span>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </Section>
@@ -67,6 +57,15 @@ export function About() {
               </p>
             ))}
           </div>
+
+          <ul className="milestones milestones--about" data-reveal style={delay(200)}>
+            {COMPANY.milestones.map((m) => (
+              <li className="milestone" key={m.year}>
+                <span className="milestone__year">{m.year}</span>
+                <span className="milestone__label">{m.label}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div data-reveal style={delay(220)}>
@@ -120,68 +119,12 @@ export function Chemicals() {
         </p>
       </div>
 
-      <ul className="chems" data-reveal style={delay(120)}>
+      <ul className="chem-list" data-reveal style={delay(120)}>
         {c.items.map((item) => (
-          <li className="chem" key={item.name}>
-            <span className="chem__sym">{item.symbol}</span>
-            <span className="chem__formula">{item.formula || `${item.symbol}Clₓ`}</span>
-            <span className="chem__name">{item.name}</span>
-          </li>
+          <li key={item}>{item}</li>
         ))}
       </ul>
-      <p className="chems__note" data-reveal style={delay(200)}>{c.note}</p>
     </Section>
-  );
-}
-
-/* =================================================== MATERIAL BAND ====== */
-/**
- * Replaces a row of image-plus-caption plates. Three equal cards captioned
- * "Granules / Powder / Powder" was the most template-shaped moment on the page
- * and made the material read as catalogue stock. Here the macro runs full-bleed
- * and the information is reduced to technical annotation.
- */
-export function MaterialBand() {
-  const hero = COMPANY.specimens[0];
-
-  return (
-    <section className="materialband" aria-labelledby="formsTitle">
-      <div className="materialband__media" aria-hidden="true">
-        <Image
-          src={hero.src}
-          alt=""
-          width={1000}
-          height={552}
-          sizes="100vw"
-        />
-      </div>
-      <div className="materialband__grade" aria-hidden="true" />
-      <div className="materialband__light" aria-hidden="true" />
-
-      <div className="shell materialband__head">
-        <Eyebrow style={{ marginBottom: "1.75rem" }}>Forms</Eyebrow>
-        <DisplayLines
-          id="formsTitle"
-          className="materialband__title"
-          lines={["Supplied to the form", "the process requires."]}
-        />
-
-        <ul className="materialband__forms" data-reveal style={delay(160)}>
-          {COMPANY.forms.map((form) => (
-            <li key={form}>{form}</li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="shell">
-        <div className="materialband__foot" data-reveal style={delay(240)}>
-          <p className="materialband__note">
-            Availability varies by metal and specification.
-          </p>
-
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -311,6 +254,15 @@ export function Contact() {
           <a className="contact__email link" href={`mailto:${COMPANY.email}`}>
             {COMPANY.email}
           </a>
+
+          <div className="contact__hq">
+            <h3 className="contact__hq-title">Headquarters</h3>
+            <address className="contact__hq-address">
+              {COMPANY.headquarters.lines.map((line) => (
+                <span key={line}>{line}</span>
+              ))}
+            </address>
+          </div>
         </div>
       </div>
     </Section>

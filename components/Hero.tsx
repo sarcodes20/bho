@@ -66,7 +66,6 @@ export default function Hero() {
             {METALS.map((metal) => (
               <li key={metal.id}>
                 <span className="sym">{metal.symbol}</span>
-                <span className="num">{metal.number}</span>
               </li>
             ))}
           </ul>

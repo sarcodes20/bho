@@ -71,7 +71,7 @@ export const viewport: Viewport = {
 
 /**
  * Organization data. Every field is drawn from the company document — no
- * address, telephone or identifier is asserted, because none was supplied.
+ * telephone or identifier is asserted, because none was supplied.
  */
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -81,6 +81,14 @@ const organizationJsonLd = {
   description: COMPANY.meta.description,
   foundingDate: COMPANY.foundedYear,
   email: COMPANY.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: COMPANY.headquarters.street,
+    addressLocality: COMPANY.headquarters.city,
+    postalCode: COMPANY.headquarters.postalCode,
+    addressRegion: COMPANY.headquarters.region,
+    addressCountry: COMPANY.headquarters.country,
+  },
   knowsAbout: [
     "Platinum Group Metals",
     "Precious metals refining",

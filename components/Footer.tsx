@@ -27,15 +27,20 @@ export default function Footer() {
               <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
             </div>
           </div>
+
+          <div>
+            <p className="footer__col-title">Headquarters</p>
+            <address className="footer__list footer__address">
+              {COMPANY.headquarters.lines.map((line) => (
+                <span key={line}>{line}</span>
+              ))}
+            </address>
+          </div>
         </div>
 
         <div className="footer__bottom">
           <span>
             &copy; {COMPANY.incorporatedYear} {COMPANY.name}
-          </span>
-          <span>
-            Established {COMPANY.foundedYear} &middot; Incorporated{" "}
-            {COMPANY.incorporatedYear}
           </span>
         </div>
       </div>

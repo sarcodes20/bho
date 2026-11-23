@@ -42,7 +42,7 @@ export const COMPANY = {
   email: "info@bhoverseas.com",
 
   hero: {
-    eyebrow: "In precious metals since 2010",
+    eyebrow: "Platinum Group Metals",
     /** Two lines, two sizes — the second is set at the top of the scale. */
     titleLead: "Rare metals.",
     titleMain: "Precisely handled.",
@@ -51,7 +51,7 @@ export const COMPANY = {
 
   statement: {
     eyebrow: "The company",
-    title: ["Since 2010.", "Precision for", "what comes next."],
+    title: ["Precision for", "what comes next."],
     copy: [
       "More than fifteen years in Platinum Group Metals, sourcing and supplying to the specification, quantity and form each customer requires.",
     ],
@@ -61,21 +61,21 @@ export const COMPANY = {
     eyebrow: "About",
     title: ["Built around", "the material."],
     copy: [
-      "Engaged in Platinum Group Metals and other specialized precious metals since 2010, with more than fifteen years of experience in the sourcing, refining, trading and supply of these metals for industrial and specialized applications.",
-      "The primary focus is Platinum, Palladium, Iridium, Ruthenium, Rhodium and Osmium. Requirements for other precious and specialty metals are evaluated on availability, specification and application.",
-      "Registered as a Limited Liability Partnership in 2015 and incorporated as a Private Limited Company in 2026, building on the experience developed since 2010.",
+      "Engaged in Platinum Group Metals since 2010, with more than fifteen years of experience in the sourcing, refining and trading of these metals for industrial and specialized applications.",
+      "The primary focus is Platinum, Palladium, Iridium, Ruthenium, Rhodium and Osmium.",
+      "Established as a proprietorship in 2015 and incorporated as a Private Limited Company in 2026, building on the experience developed since 2010.",
     ],
     facts: [
       { k: "Focus", v: "Platinum Group Metals" },
-      { k: "Activities", v: "Sourcing · Refining · Trading · Supply" },
+      { k: "Activities", v: "Sourcing · Refining · Trading" },
       { k: "Trade", v: "Domestic and international" },
       { k: "Served", v: "Industrial and specialized applications" },
     ],
   },
 
   milestones: [
-    { year: "2010", label: "Engaged in the business of Platinum Group Metals and other specialized precious metals." },
-    { year: "2015", label: "Registered as a Limited Liability Partnership." },
+    { year: "2010", label: "Engaged in the business of Platinum Group Metals." },
+    { year: "2015", label: "Established as a proprietorship." },
     { year: "2026", label: "Incorporated as a Private Limited Company." },
   ] as Milestone[],
 
@@ -93,7 +93,7 @@ export const COMPANY = {
     {
       id: "trading",
       name: "Trading",
-      copy: "Domestic and international trading of precious and specialty metals.",
+      copy: "Domestic and international trading of PGMs.",
     },
     {
       id: "secondary-materials",
@@ -144,29 +144,29 @@ export const COMPANY = {
   ] as Principle[],
 
   /**
-   * The forms the company supplies, drawn from the per-metal form lists in the
-   * product document. Shown as a technical index over the material band.
-   */
-  forms: ["Sponge", "Scrap", "Precious metal chemicals", "Fabricated to requirement"],
-
-  /**
-   * Precious metal chemicals, supplied to the client's requirements. Names as
-   * the company gave them; formulas are the standard compounds those names
-   * refer to. Platinum chloride carries no formula until the company confirms
-   * which compound it supplies (PtCl2, PtCl4 or chloroplatinic acid).
+   * Precious metal chemicals, listed as the company gave them.
    */
   chemicals: {
     eyebrow: "Our products",
     title: ["Precious metal", "chemicals."],
-    copy: "Platinum Group Metal chlorides, prepared to each client's requirements.",
+    copy: "PGM chlorides, prepared to each client's requirements.",
     items: [
-      { symbol: "Pt", name: "Platinum chloride", formula: "" },
-      { symbol: "Pd", name: "Palladium chloride", formula: "PdCl₂" },
-      { symbol: "Ir", name: "Iridium trichloride", formula: "IrCl₃" },
-      { symbol: "Ru", name: "Ruthenium trichloride", formula: "RuCl₃" },
-      { symbol: "Rh", name: "Rhodium trichloride", formula: "RhCl₃" },
+      "Ruthenium Trichloride",
+      "Palladium Chloride",
+      "Iridium",
+      "Platinum",
+      "Chloroplatinic Acid",
     ],
-    note: "Supplied as per the client's requirements.",
+  },
+
+  /** Registered office. */
+  headquarters: {
+    lines: ["3, Venus Towers, Naya Bazaar", "Ajmer – 305001, Rajasthan, India"],
+    street: "3, Venus Towers, Naya Bazaar",
+    city: "Ajmer",
+    postalCode: "305001",
+    region: "Rajasthan",
+    country: "IN",
   },
 
   /**

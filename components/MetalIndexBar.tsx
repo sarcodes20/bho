@@ -24,7 +24,6 @@ export default function MetalIndexBar() {
                   )
                 }
               >
-                <span className="index-bar__num">{metal.number}</span>
                 <span className="index-bar__sym">{metal.symbol}</span>
                 <span className="index-bar__name">{metal.name}</span>
               </a>
