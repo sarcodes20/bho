@@ -19,13 +19,13 @@ import type {
 export const COMPANY = {
   name: "BH Overseas",
   wordmark: "BH Overseas",
-  descriptor: "Platinum Group Metals & Specialty Precious Metals",
+  descriptor: "Platinum Group Metals",
 
   /** Used in the <title>, meta description and structured data. */
   meta: {
-    title: "BH Overseas | Platinum Group Metals & Specialty Precious Metals",
+    title: "BH Overseas | Platinum Group Metals",
     description:
-      "BH Overseas sources, refines, trades and supplies Platinum Group Metals and selected specialty precious metals for industrial and specialized applications.",
+      "BH Overseas sources, refines and trades Platinum Group Metals for industrial and specialized applications.",
     /** Overridden on demo and preview deployments; the real domain is the fallback. */
     url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.bhoverseas.com",
     locale: "en_IN",
@@ -46,14 +46,14 @@ export const COMPANY = {
     /** Two lines, two sizes — the second is set at the top of the scale. */
     titleLead: "Rare metals.",
     titleMain: "Precisely handled.",
-    lede: "Sourcing, refining, trading and supply of Platinum Group Metals for industrial and specialized applications.",
+    lede: "Sourcing, refining and trading of Platinum Group Metals for industrial and specialized applications.",
   },
 
   statement: {
     eyebrow: "The company",
     title: ["Precision for", "what comes next."],
     copy: [
-      "More than fifteen years in Platinum Group Metals, sourcing and supplying to the specification, quantity and form each customer requires.",
+      "More than fifteen years in Platinum Group Metals, sourcing, refining and trading to the specification, quantity and form each customer requires.",
     ],
   },
 
@@ -83,7 +83,7 @@ export const COMPANY = {
     {
       id: "sourcing",
       name: "Sourcing",
-      copy: "Sourcing of Platinum Group Metals and specialty precious metals according to specific requirements.",
+      copy: "Sourcing of Platinum Group Metals according to specific requirements.",
     },
     {
       id: "refining",

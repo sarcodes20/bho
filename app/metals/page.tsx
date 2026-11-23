@@ -47,8 +47,8 @@ export default function MetalsPage() {
             <DisplayLines as="h1" lines={["The Platinum Group"]} />
           </div>
           <p className="body-copy" data-reveal style={{ maxWidth: "34ch" }}>
-            BH Overseas focuses on the sourcing, refining and supply of Platinum
-            Group Metals and selected specialty precious metals.
+            BH Overseas focuses on the sourcing, refining and trading of Platinum
+            Group Metals.
           </p>
         </div>
 

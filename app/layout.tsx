@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: COMPANY.meta.title,
     description:
-      "Sourcing, refining, trading and supply of Platinum, Palladium, Iridium, Ruthenium, Rhodium and Osmium.",
+      "Sourcing, refining and trading of Platinum, Palladium, Iridium, Ruthenium, Rhodium and Osmium.",
   },
   // robots.txt is only a request; the meta tag is what actually keeps a demo
   // out of the index. Both read the same flag.
