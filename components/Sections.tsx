@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import { COMPANY } from "@/data/company";
 import { Arrow, DisplayLines, Eyebrow, Section } from "@/components/ui";
 import MetalExplorer from "@/components/MetalExplorer";
-import TradeGraticule from "@/components/TradeGraticule";
 
 const delay = (ms: number) =>
   ({ "--reveal-delay": `${ms}ms` }) as CSSProperties;
@@ -10,7 +9,7 @@ const delay = (ms: number) =>
 /* ======================================================== STATEMENT ===== */
 export function Statement() {
   return (
-    <Section id="about" labelledBy="statementTitle">
+    <Section id="about" tight labelledBy="statementTitle">
       <div className="statement__grid">
         <div>
           <Eyebrow style={{ marginBottom: "2rem" }}>
@@ -40,7 +39,7 @@ export function Statement() {
 /* ========================================================== COMPANY ===== */
 export function About() {
   return (
-    <Section light labelledBy="companyTitle">
+    <Section light tight labelledBy="companyTitle">
       <div className="about__grid">
         <div>
           <Eyebrow style={{ marginBottom: "2rem" }}>{COMPANY.about.eyebrow}</Eyebrow>
@@ -69,8 +68,7 @@ export function About() {
         </div>
 
         <div data-reveal style={delay(220)}>
-          <TradeGraticule />
-          <dl className="facts">
+          <dl className="facts facts--top">
             {COMPANY.about.facts.map((f) => (
               <div className="fact" key={f.k}>
                 <dt className="fact__k">{f.k}</dt>
