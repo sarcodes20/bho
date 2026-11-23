@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { COMPANY } from "@/data/company";
 import { Arrow, DisplayLines, Eyebrow, Section } from "@/components/ui";
 import MetalExplorer from "@/components/MetalExplorer";
+import TradeGraticule from "@/components/TradeGraticule";
 
 const delay = (ms: number) =>
   ({ "--reveal-delay": `${ms}ms` }) as CSSProperties;
@@ -68,14 +69,7 @@ export function About() {
         </div>
 
         <div data-reveal style={delay(220)}>
-          <dl className="facts facts--top">
-            {COMPANY.about.facts.map((f) => (
-              <div className="fact" key={f.k}>
-                <dt className="fact__k">{f.k}</dt>
-                <dd className="fact__v">{f.v}</dd>
-              </div>
-            ))}
-          </dl>
+          <TradeGraticule />
         </div>
       </div>
     </Section>
