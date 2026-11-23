@@ -79,7 +79,7 @@
   --sp-5: 1.5rem;  --sp-6: 2rem;    --sp-7: 3rem;    --sp-8: 4rem;
   --sp-9: 6rem;    --sp-10: 8rem;   --sp-11: 11rem;
 
-  --section-y: clamp(5rem, 3.2rem + 7.6vw, 11rem);
+  --section-y: clamp(3.5rem, 2.4rem + 4vw, 6.5rem);
   --gutter:    clamp(1.25rem, 0.55rem + 3vw, 3.5rem);
   --measure:   66ch;
   --maxw:      104rem;
@@ -178,7 +178,7 @@ button { background: none; border: 0; }
 }
 
 .section { --pad: var(--section-y); padding-block: var(--pad); position: relative; }
-.section--tight { --pad: clamp(3.5rem, 2.4rem + 4.6vw, 7rem); }
+.section--tight { --pad: clamp(3rem, 2rem + 3vw, 5rem); }
 
 /* Menu jumps land on the section's content, not on its top padding: the
    section scrolls up past its own padding to leave about 2rem of air under
