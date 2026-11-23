@@ -57,15 +57,6 @@ export function About() {
               </p>
             ))}
           </div>
-
-          <ul className="milestones milestones--about" data-reveal style={delay(200)}>
-            {COMPANY.milestones.map((m) => (
-              <li className="milestone" key={m.year}>
-                <span className="milestone__year">{m.year}</span>
-                <span className="milestone__label">{m.label}</span>
-              </li>
-            ))}
-          </ul>
         </div>
 
         <div data-reveal style={delay(220)}>
